@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>冷文聊编辑</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2023-01-13T15:26:28.830Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>Mr丶冷文</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>（二）进入系统及简单命令</title>
+    <link href="http://example.com/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/"/>
+    <id>http://example.com/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/</id>
+    <published>2023-01-13T15:25:00.462Z</published>
+    <updated>2023-01-13T15:26:28.830Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>经过上节课的学习我相信大家已经将CentOS 7安装成功了，我这里以CentOS做演示是因为目前CentOS是国内用的最多的服务器操作系统，这节课就来讲讲进入系统的几种方式及一些简单的命令</p><h2 id="进入系统"><a href="#进入系统" class="headerlink" title="进入系统"></a>进入系统</h2><ul><li>普通用户<ul><li>选择对应的用户输入密码即可</li></ul></li><li>root用户<ul><li>选择 not listed </li><li>输入用户名和密码</li></ul></li></ul><h2 id="Linux文件结构"><a href="#Linux文件结构" class="headerlink" title="Linux文件结构"></a>Linux文件结构</h2><p>在Linux中，文件系统是一棵树，<code>/</code>为其根结点，形状大致如下：</p><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/b8ipofh4gn1669448309044.png"></p><h3 id="常见的二级目录"><a href="#常见的二级目录" class="headerlink" title="常见的二级目录"></a>常见的二级目录</h3><ul><li>&#x2F;bin：存放二进制可执行命令目录</li><li><strong>&#x2F;home：用户主目录的基点目录，默认情况每个用户主目录都设在该目录下，如默认：用户user01的主目录是&#x2F;home&#x2F;user01，可用~user01表示</strong></li><li>&#x2F;lib：存放标准程序设计库目录，又叫动态链接共享库目录，目录中文件类似windows里的后缀名为dll的文件</li><li><strong>&#x2F;etc：存放系统管理和配置文件目录</strong></li><li>&#x2F;dev：存放设备特殊文件目录，如声卡文件，磁盘文件等</li><li><strong>&#x2F;usr：最庞大的目录，存放应用程序和文件目录</strong></li><li>&#x2F;proc：虚拟目录，是系统内存的映射，可直接访问这个目录来获取系统信息</li><li>&#x2F;root：系统管理员的主目录（特权阶级）</li><li>&#x2F;var：存放系统产生的经常变化文件的目录，例如打印机、邮件等假脱机目录、日志文件、格式化后的手册页以及一些应用程序的数据文件等</li><li>&#x2F;tmp：存放公用临时文件目录</li><li>&#x2F;sbin 系统管理命令，这里存放的是系统管理员使用的管理程序</li><li>&#x2F;mnt 系统提供这个目录是让用户临时挂载其他的文件系统</li><li>&#x2F;lost+found 这个目录平时是空的，用于存放系统非正常关机而留下未保存的文件</li></ul><h3 id="Linux文件路径-重要"><a href="#Linux文件路径-重要" class="headerlink" title="Linux文件路径(重要)"></a>Linux文件路径(重要)</h3><ul><li>绝对路径：从根(&#x2F;)一直到目标文件的路径</li><li>相对路径：相对于当前文件的父目录的路径</li></ul><h2 id="Linux行提示符"><a href="#Linux行提示符" class="headerlink" title="Linux行提示符"></a>Linux行提示符</h2><ul><li>我们右键打开终端，可以看到如下的行提示符</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@localhost ~]$ </span><br></pre></td></tr></table></figure><ul><li>lengwen：表示当前打开shell的用户</li><li>@：分隔符</li><li>localhost：主机名</li><li>~：当前路径(<strong>在Linux中<code>~</code>可以快捷的代替当前用户的家目录</strong>)</li><li>$：身份提示符<ul><li>#表示超级用户</li><li>$表示普通用户</li></ul></li></ul><h2 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h2><p>命令<code>su username</code>来切换</p><p><strong>注意：命令要在行提示符之后输入才能执行</strong></p><h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h3 id="命令的执行"><a href="#命令的执行" class="headerlink" title="命令的执行"></a>命令的执行</h3><ul><li>命令必须在行提示符之后输入</li><li>命令格式：命令 参数名 参数值</li><li>Ctrl + C：撤销命名的执行</li><li>命令参数<ul><li>-参数：单词缩写</li><li>–参数：单词的全拼</li></ul></li></ul><h3 id="命令的帮助"><a href="#命令的帮助" class="headerlink" title="命令的帮助"></a>命令的帮助</h3><ul><li>man 命令：查看命令的功能<ul><li>空格：下一页</li><li>b：上一页</li></ul></li><li>命令 –help：查看命令的帮助</li><li>[ ]：选择加入的内容，可加可不加</li><li>… ：加入的内容个数任意</li><li>&lt;&gt; ：内容在命令执行过程当中必须要加</li></ul><h2 id="简单的系统命令"><a href="#简单的系统命令" class="headerlink" title="简单的系统命令"></a>简单的系统命令</h2><h3 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h3><p>跳转到目标目录</p><p>用法<code>cd 目标目录</code></p><h3 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h3><p>打印当前目录</p><h3 id="date"><a href="#date" class="headerlink" title="date"></a>date</h3><ul><li><code>date 11181115</code>：把系统时间设定为11月18日11：15 格式：月月天天小时分钟</li><li><code>date 111811152022.55</code>：2022表示年（可以不加）.55 表示秒（可以不加）</li><li><code>date -d +xday -xday</code>：查看x天前或者后的时间</li><li><code>date +%....</code>：设定date的输出格式<ul><li>%Y年（例如：2021,2022等）</li><li>%m月（01…12）</li><li>%d一个月的第几天（01…31）</li><li>%H小时（00…23）</li><li>%M分（00…59）</li><li>%S秒（00…59）</li></ul></li></ul><h3 id="passwd"><a href="#passwd" class="headerlink" title="passwd"></a>passwd</h3><ul><li>passwd 修改当前用户密码</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/a8831yz11g1669450118155.png"></p><ul><li>参数</li></ul><table><thead><tr><th>参数名</th><th>参数值</th><th>备注</th></tr></thead><tbody><tr><td>-S</td><td>用户名</td><td>用户密码信息</td></tr><tr><td>-status</td><td>用户名</td><td>用户密码状态</td></tr><tr><td>-l</td><td>用户名</td><td>锁定账号</td></tr><tr><td>-u</td><td>用户名</td><td>解锁</td></tr><tr><td>-n 时间（单位：天）</td><td>用户名</td><td>设置密码最短有效期</td></tr><tr><td>-x 时间（单位：天）</td><td>用户名</td><td>设置密码最长有效期</td></tr><tr><td>-w 时间（单位：天）</td><td>用户名</td><td>设置警告期</td></tr><tr><td>-i 时间（单位：天）</td><td>用户名</td><td>设定用户非活跃天数</td></tr><tr><td>-d</td><td>用户名</td><td>清除密码</td></tr></tbody></table><h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><ul><li>file：<code>file 文件名字</code>查看文件类型</li><li>文件内容查看<ul><li><code>cat filename</code>显示文件的全部内容</li><li><code>less filename</code>分页浏览，按”q”退出</li><li><code>head filename</code>显示一个文件的前几行</li><li><code>head -n 5 filename</code>显示前五行</li><li><code>tail filename</code>显示一个文件的后几行</li><li><code>tail -n 5 filename</code>显示后五行</li></ul></li><li>wc统计文件容量信息<ul><li><code>-l</code>行数</li><li><code>-w</code>字数</li><li><code>-c</code>字节数</li><li><code>-m</code>字符数</li></ul></li></ul><h2 id="Tab键"><a href="#Tab键" class="headerlink" title="Tab键"></a>Tab键</h2><p>在系统中table键可以自动补齐存在的命令，文件名称和某些命令的参数</p><h2 id="history"><a href="#history" class="headerlink" title="history"></a>history</h2><ul><li><p><code>history</code>：历史调用</p></li><li><p><code>hostory -c</code>：清除当前环境当中的历史命令</p></li><li><p>！数字：执行第多少行命令</p></li><li><p>！字母：执行最近一条以这个字母开头的命令</p></li><li><p><strong>ctrl +R +关键字（重要）：执行最近一条含有这个关键字的命令</strong></p></li><li><p>上下键：逐行调用命令</p></li></ul><h2 id="Shell中的一些快捷键"><a href="#Shell中的一些快捷键" class="headerlink" title="Shell中的一些快捷键"></a>Shell中的一些快捷键</h2><ul><li><p><code>上下</code>历史的上一条命令，下一条命令</p></li><li><p><code>左右</code>一个字符一个字符移动</p></li><li><p><strong><code>Ctrl + a </code>光标移动到行首</strong></p></li><li><p><strong><code>Ctrl + e </code>光标所在位置删除到行首</strong></p></li><li><p><code>Ctrl + u </code>光标所在位置删除到行首</p></li><li><p><code>Ctrl + k </code>光标所在位置删除到行尾</p></li><li><p><strong><code>Ctrl + r + 关键字 </code>调出最近一条含有关键字的命令</strong></p></li><li><p><strong><code>Ctrl + c </code>撤销以输入的命令</strong></p></li><li><p><code>Ctrl + d </code>退出当前用户环境</p></li><li><p><strong><code>Ctrl + L </code>清空屏幕</strong></p></li><li><p><code>Ctrl + Shift + c </code>复制</p></li><li><p><code>Ctrl + Shift + v </code>粘贴</p></li><li><p><code>Ctrl + shift + t </code>在现有shell中重新打开一个table</p></li><li><p><code>Ctrl + shift + n</code>在shell中打</p></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;经过上节课的学习我相信大家已经将CentOS 7安装成功了，我这里以CentOS做演示是因为目前CentOS是国内用的最多的服务器操作系统，</summary>
+      
+    
+    
+    
+    <category term="Linux菜鸟入门" scheme="http://example.com/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/"/>
+    
+    
+    <category term="linux" scheme="http://example.com/tags/linux/"/>
+    
+    <category term="vmware" scheme="http://example.com/tags/vmware/"/>
+    
+    <category term="centos" scheme="http://example.com/tags/centos/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>（一）Linux 系列教程介绍</title>
+    <link href="http://example.com/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://example.com/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/</id>
+    <published>2023-01-13T15:21:31.956Z</published>
+    <updated>2023-01-13T15:41:24.494Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>录这套教程主要帮助那些对<code>Linux</code>了解很少但又想做一个初步学习的小伙伴，因为我们一般在找开发相关的工作面试时偶尔也会被问到，而且做为一名开发人员如果不会操作<code>Linux</code>操作系统确实也有些说不过去，因为一般我们在企业中用到的中间件、服务的部署等都是在<code>Linux</code>上，本期教程就带着大家来入门下<code>Linux</code>，学习了<code>Linux</code>操作后大家如果以后用Mac系统也会用起来得心应手</p><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul><li><p>CentOS下载：</p><ul><li><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学镜像站</a></li><li><a href="https://developer.aliyun.com/mirror/">阿里巴巴镜像站</a></li></ul></li><li><p>VMware下载：<a href="https://customerconnect.vmware.com/cn/downloads/#all_products">https://customerconnect.vmware.com/cn/downloads/#all_products</a></p><ul><li>Mac下载<strong>VMware Fusion</strong></li><li>Windows下载 <strong>VMware Workstation Pro</strong></li></ul></li></ul><h2 id="创建一个CentOS虚拟机"><a href="#创建一个CentOS虚拟机" class="headerlink" title="创建一个CentOS虚拟机"></a>创建一个CentOS虚拟机</h2><h3 id="Mac上的操作"><a href="#Mac上的操作" class="headerlink" title="Mac上的操作"></a>Mac上的操作</h3><ul><li>点击新建选择从光盘或映像中安装</li><li>选择我们的<code>iso</code>文件</li><li>一直点击继续直到结束</li><li>根据自己需要选择磁盘大小和内存大小及CPU</li><li>启动虚拟机</li></ul><h3 id="Windows上的操作"><a href="#Windows上的操作" class="headerlink" title="Windows上的操作"></a>Windows上的操作</h3><ul><li><p>创建虚拟机</p><ul><li>点击文件 -&gt; 新建虚拟机</li><li>选择典型，点击下一步</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/f65f58840e434f8fa5bd5a493a8f0329.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/f65f58840e434f8fa5bd5a493a8f0329.png"></p><ul><li>选择镜像文件点击下一步</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/4fe69a3073a74b39bf4ceda34b8b2f30.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/4fe69a3073a74b39bf4ceda34b8b2f30.png"></p><ul><li>选择安装位置点击下一步</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/d1beb68be801425aad01a5c446a8f79e.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/d1beb68be801425aad01a5c446a8f79e.png"></p><ul><li>根据需要调整磁盘大小</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/c497762c1f454c8e8e9cc4d808794633.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/c497762c1f454c8e8e9cc4d808794633.png"></p><ul><li>根据需要调整其它硬件</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/908e7def33ff4e478df0b9ef7898c254.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/908e7def33ff4e478df0b9ef7898c254.png"></p></li></ul><h2 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h2><ul><li>选择安装CentOS</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/a9mltm5ad91669436712809.png"></p><ul><li>选择语言并点击继续</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/tfl37tm9wd1669436832522.png"></p><ul><li>选择安装盘</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/f8qxpnno2n1669436904214.png"></p><ul><li>选择目标磁盘并点击done</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/07sei4si491669436952180.png"></p><ul><li>选择安装项</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/kxbj25huid1669436994485.png"></p><ul><li>由于我们是亲手，所以可以装一个图形桌面来方便我们学习和操作，选择GNOME 桌面，然后点击Done</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/z2eqvcqqwb1669437099534.png"></p><ul><li>设置完成之后就可以点击继续安装了</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/mj1ay3kmul1669437153942.png"></p><ul><li>在安装过程中设置root密码及我们个人的账户，等待安装完成</li></ul><p>  <img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/ny62q29krh1669437248487.png"></p><h2 id="初次启动"><a href="#初次启动" class="headerlink" title="初次启动"></a>初次启动</h2><ul><li>点击协议</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/08e342efe2ea47c993718be242c837b8.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/08e342efe2ea47c993718be242c837b8.png"></p><ul><li>点击同意然后点击Done</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/877808368be14cc2b165397c3db0bf5f.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/877808368be14cc2b165397c3db0bf5f.png"></p><ul><li>点击完成</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/79953ca3283749489a369b8418ed69ac.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/79953ca3283749489a369b8418ed69ac.png"></p><ul><li>输入密码进入系统后会有弹窗，不用管，一直点击Next</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/d59e29e7cb3a4fa4a4626cd81e85ee34.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/d59e29e7cb3a4fa4a4626cd81e85ee34.png"></p><h2 id="语言设置"><a href="#语言设置" class="headerlink" title="语言设置"></a>语言设置</h2><ul><li>点击关机按钮-&gt;设置图标</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/71c8db9ac3924167bbb681ef0042e955.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/71c8db9ac3924167bbb681ef0042e955.png"></p><ul><li>点击区域和语言</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/8072dc2ada0b46deba409f283b2b70a0.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/8072dc2ada0b46deba409f283b2b70a0.png"></p><ul><li>全部选择汉语</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/ca94089e65444e5dbdc6620eca7dd303.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/ca94089e65444e5dbdc6620eca7dd303.png"></p><ul><li>点击重启</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/2d70035953eb4d789c254d291f351064.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/2d70035953eb4d789c254d291f351064.png"></p><ul><li>重启后这里非常重要，一定选保留旧名称</li></ul><p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/4b24ccbd02694993824ec5e2f9207d50.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/2059/4b24ccbd02694993824ec5e2f9207d50.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;录这套教程主要帮助那些对&lt;code&gt;Linux&lt;/code&gt;了解很少但又想做一个初步学习的小伙伴，因为我们一般在找开发相关的工作面试时偶尔也</summary>
+      
+    
+    
+    
+    <category term="Linux菜鸟入门" scheme="http://example.com/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/"/>
+    
+    
+    <category term="linux" scheme="http://example.com/tags/linux/"/>
+    
+    <category term="vmware" scheme="http://example.com/tags/vmware/"/>
+    
+    <category term="centos" scheme="http://example.com/tags/centos/"/>
+    
+  </entry>
+  
+</feed>
