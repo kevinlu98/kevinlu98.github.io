@@ -532,6 +532,61 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+<div id="go-top"></div>
+<style type="text/css">
+    #go-top {
+        width: 40px;
+        height: 36px;
+        background-color: plum;
+        position: relative;
+        border-radius: 2px;
+        position: fixed;
+        right: 10px;
+        bottom: 60px;
+        cursor: pointer;
+        opacity: 0;
+    }
+
+    #go-top:after {
+        content: " ";
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+        width: 12px;
+        height: 12px;
+        transform: rotate(-45deg)
+    }
+
+    #go-top:hover {
+        background-color: #8a2be2
+    }
+</style>
+<script>
+    $(function () {
+        var o = $("#go-top");
+        $(window).scroll(function () {
+            //滚动高度
+            let scTop = $(window).scrollTop()
+            //屏幕高度
+            let height = $(window).height()
+            console.log(scTop, height * 0.5);
+            if (scTop >= height * 0.5) {
+                //利用jquery动画组件显示
+                o.stop().animate({ 'opacity': '1' }, 500)
+            } else {
+                o.stop().animate({ 'opacity': '0' }, 500)
+            }
+        })
+        o.on('click', function () {
+            $('body,html').stop().animate({
+                scrollTop: 0
+            })
+        })
+    })
+</script>
+
   
     <style>
         .highlight-wrap .copy-btn {
