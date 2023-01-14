@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://kevinlu98.github.io/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/</loc>
+    <loc>https://study.kevinlu98.cn/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/</loc>
     
     <lastmod>2023-01-14</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/about/index.html</loc>
+    <loc>https://study.kevinlu98.cn/about/index.html</loc>
     
     <lastmod>2023-01-14</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/repository/index.html</loc>
+    <loc>https://study.kevinlu98.cn/repository/index.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/</loc>
+    <loc>https://study.kevinlu98.cn/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/tags/index.html</loc>
+    <loc>https://study.kevinlu98.cn/tags/index.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/books/index.html</loc>
+    <loc>https://study.kevinlu98.cn/books/index.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/categories/index.html</loc>
+    <loc>https://study.kevinlu98.cn/categories/index.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/links/index.html</loc>
+    <loc>https://study.kevinlu98.cn/links/index.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/404.html</loc>
+    <loc>https://study.kevinlu98.cn/404.html</loc>
     
     <lastmod>2023-01-13</lastmod>
     
@@ -84,7 +84,7 @@
   
 
   <url>
-    <loc>https://kevinlu98.github.io/</loc>
+    <loc>https://study.kevinlu98.cn/</loc>
     <lastmod>2023-01-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -92,21 +92,21 @@
 
   
   <url>
-    <loc>https://kevinlu98.github.io/tags/linux/</loc>
+    <loc>https://study.kevinlu98.cn/tags/linux/</loc>
     <lastmod>2023-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/tags/vmware/</loc>
+    <loc>https://study.kevinlu98.cn/tags/vmware/</loc>
     <lastmod>2023-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://kevinlu98.github.io/tags/centos/</loc>
+    <loc>https://study.kevinlu98.cn/tags/centos/</loc>
     <lastmod>2023-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -115,7 +115,7 @@
 
   
   <url>
-    <loc>https://kevinlu98.github.io/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/</loc>
+    <loc>https://study.kevinlu98.cn/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/</loc>
     <lastmod>2023-01-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
