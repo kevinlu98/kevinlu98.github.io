@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>冷文聊编辑</title>
+  <meta name="description" content="冷文聊编辑【study.kevinlu98.cn】，分享B站教程中用到的课件及资料，用代码做点好玩的事件，让每一天都变的充实起来">
+<meta property="og:type" content="website">
+<meta property="og:title" content="冷文聊编辑">
+<meta property="og:url" content="https://study.kevinlu98.cn/page/3/index.html">
+<meta property="og:site_name" content="冷文聊编辑">
+<meta property="og:description" content="冷文聊编辑【study.kevinlu98.cn】，分享B站教程中用到的课件及资料，用代码做点好玩的事件，让每一天都变的充实起来">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Mr丶冷文">
+<meta property="article:tag" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+<meta name="twitter:card" content="summary">
+  <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://study.kevinlu98.cn/page/3/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/kevinlu98" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Mr丶冷文</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Golang Engineer &amp; Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanxi, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>冷文聊编辑【study.kevinlu98.cn】，主要分享B站教程中用到的课件及资料，主站为：<a target="_blank" rel="noopener" href="https://kevinlu98.cn">kevinlu98.cn</a>，欢迎大家访问<br><br>我也买了<a target="_blank" rel="noopener" href="https://www.itjc8.com/">https://www.itjc8.com/</a>这个网站的会员，大家如果在这个网站有想下载的东西请联系我，我发下载地址给大家</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a><span class="category-list-count">25</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/centos/" style="font-size: 13px;">centos</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/vmware/" style="font-size: 13px;">vmware</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;">个人博客</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/" style="font-size: 13.67px;">博客系统</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 13.33px;">异常处理</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/" class="title">（二）进入系统及简单命令</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/" class="title">（一）Linux 系列教程介绍</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time> <a href="/2022/10/10/springbootblog/25.%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD%E5%8F%8A%E6%89%93%E5%8C%85/" class="title">（二十三）登录功能及打包</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/24.%E5%90%8E%E5%8F%B0%E5%85%B6%E5%AE%83%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="title">（二十二）后台其它功能的实现</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/23.%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E6%8B%A6%E6%88%AA%E5%8F%8A%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E8%B7%B3%E8%BD%AC/" class="title">（二十一）统一异常拦截及自定义错误跳转</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  <main class="main" role="main">
+  
+  <div class="content article-list">
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/04/springbootblog/7.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">（五）轮播图管理与文件上传（下）</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/04/springbootblog/7.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="article-date">
+	  <time datetime="2022-10-03T19:21:00.000Z" itemprop="datePublished">10月 4</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/04/springbootblog/7.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 523(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/04/springbootblog/6.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A01/">（五）轮播图管理与文件上传（上）</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/04/springbootblog/6.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A01/" class="article-date">
+	  <time datetime="2022-10-03T18:21:00.000Z" itemprop="datePublished">10月 4</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/04/springbootblog/6.%E8%BD%AE%E6%92%AD%E5%9B%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A01/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/03/springbootblog/5.%E5%AE%8C%E6%88%90%E5%8F%8B%E9%93%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8/">（四）完成友链管理与代码生成器</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/03/springbootblog/5.%E5%AE%8C%E6%88%90%E5%8F%8B%E9%93%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8/" class="article-date">
+	  <time datetime="2022-10-02T18:21:00.000Z" itemprop="datePublished">10月 3</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/03/springbootblog/5.%E5%AE%8C%E6%88%90%E5%8F%8B%E9%93%BE%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/02/springbootblog/4.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A12/">（三）分类相关功能设计（下）</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/02/springbootblog/4.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A12/" class="article-date">
+	  <time datetime="2022-10-01T19:21:00.000Z" itemprop="datePublished">10月 2</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/springbootblog/4.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A12/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/">（三）分类相关功能设计（上）</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/" class="article-date">
+	  <time datetime="2022-10-01T18:21:00.000Z" itemprop="datePublished">10月 2</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/01/springbootblog/2.%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%AF%BC%E5%85%A5%E5%8F%8AThymeleaf%E9%85%8D%E7%BD%AE/">（二）管理页面的导入及Thymeleaf配置</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/01/springbootblog/2.%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%AF%BC%E5%85%A5%E5%8F%8AThymeleaf%E9%85%8D%E7%BD%AE/" class="article-date">
+	  <time datetime="2022-10-01T15:23:00.000Z" itemprop="datePublished">10月 1</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/01/springbootblog/2.%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%AF%BC%E5%85%A5%E5%8F%8AThymeleaf%E9%85%8D%E7%BD%AE/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+  </p>
+</article>
+
+    
+      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="article-header">
+    
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/01/springbootblog/1.%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E5%8F%8A%E6%A1%86%E6%9E%B6%E6%90%AD%E5%BB%BA/">（一）项目介绍及框架搭建</a>
+    </h1>
+  
+
+  </div>
+  
+  <p class="article-meta">
+    <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/01/springbootblog/1.%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E5%8F%8A%E6%A1%86%E6%9E%B6%E6%90%AD%E5%BB%BA/" class="article-date">
+	  <time datetime="2022-10-01T14:23:00.000Z" itemprop="datePublished">10月 1</time>
+	</a>
+</span>
+    
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+    
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/01/springbootblog/1.%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E5%8F%8A%E6%A1%86%E6%9E%B6%E6%90%AD%E5%BB%BA/#comments" class="article-comment-link">评论</a></span>
+    
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+  </p>
+</article>
+
+    
+  </div>
+
+  
+    
+    <nav class="bar bar-footer clearfix" data-stick-bottom>
+        <div class="bar-inner">
+        <div class="pager pull-left">
+            
+            <a class="extend prev" rel="prev" href="/page/2/"><i class="icon icon-angle-left"></i> 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+            
+            <a class="next disabled" href="javascript:;">下一页 <i class="icon icon-angle-right"></i></a>
+            
+        </div>
+        <div class="total-article bar-right">Page 3 of 3</div>
+        </div>
+    </nav>
+    
+ 
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 Mr丶冷文 
+        
+        
+            <a target="_blank" href="https://beian.miit.gov.cn">陕ICP备19024566-1号</a>
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+  
+    <style>
+        .highlight-wrap .copy-btn {
+            display: inline-block;
+            padding: 2px 6px;
+            position: absolute;
+            right: 4px;
+            top: 36px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .highlight-wrap .copy-tips {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            top: 36px;
+            right: 36px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background-color: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .highlight-wrap .copy-tips::before {
+            content: '◆';
+            color: #000;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+        }
+
+
+
+        .highlight-wrap {
+            position: relative;
+        }
+    </style>
+    <script>
+        addLoadEvent(() => {
+            let copyIcon = `<svg t="1673632770304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2720" width="20" height="20"><path d="M857.373005 65.290005 469.604424 65.290005c-34.211173 0-62.044078 27.832905-62.044078 62.043055l0 10.340509-63.076594 0c-25.993001 0-48.228421 16.346293-57.001225 39.293935L166.626995 176.967504c-34.21015 0-62.043055 27.832905-62.043055 62.043055l0 657.655358c0 34.21015 27.832905 62.043055 62.043055 62.043055l550.115086 0c34.21015 0 62.043055-27.832905 62.043055-62.043055l0-49.634444 78.587869 0c34.21015 0 62.043055-27.832905 62.043055-62.043055L919.41606 127.33306C919.41606 93.122911 891.583155 65.290005 857.373005 65.290005zM344.483752 179.035606l194.402595 0c10.833743 0 19.646456 8.813736 19.646456 19.646456 0 10.833743-8.813736 19.646456-19.646456 19.646456L344.483752 218.328517c-10.833743 0-19.646456-8.813736-19.646456-19.646456C324.836273 187.849342 333.650009 179.035606 344.483752 179.035606zM737.423099 896.665917c0 11.402701-9.278317 20.681018-20.681018 20.681018L166.626995 917.346935c-11.403724 0-20.681018-9.278317-20.681018-20.681018L145.945977 239.010559c0-11.402701 9.277294-20.681018 20.681018-20.681018l120.111588 0c8.197706 24.02723 30.977525 41.362037 57.744145 41.362037l194.402595 0c26.767644 0 49.54644-17.334807 57.744145-41.362037l120.111588 0c11.402701 0 20.681018 9.278317 20.681018 20.681018L737.422076 896.665917zM878.054023 784.988418c0 11.402701-9.278317 20.681018-20.681018 20.681018l-78.587869 0L778.785136 239.010559c0-34.21015-27.832905-62.043055-62.043055-62.043055L595.886549 176.967504c-8.771781-22.947641-31.007201-39.293935-57.001225-39.293935l-89.963964 0L448.921359 127.33306c0-11.403724 9.278317-20.681018 20.683065-20.681018l387.768581 0c11.402701 0 20.681018 9.277294 20.681018 20.681018L878.054023 784.988418z" fill="#272636" p-id="2721"></path><path d="M620.597347 334.252737 260.748652 334.252737c-11.422144 0-20.681018 9.259898-20.681018 20.681018s9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018S632.018467 334.252737 620.597347 334.252737z" fill="#272636" p-id="2722"></path><path d="M620.597347 454.201619 260.748652 454.201619c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C641.278365 463.46254 632.018467 454.201619 620.597347 454.201619z" fill="#272636" p-id="2723"></path><path d="M440.673511 574.151525 260.748652 574.151525c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l179.924859 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C461.35453 583.411423 452.093609 574.151525 440.673511 574.151525z" fill="#272636" p-id="2724"></path></svg>`
+            $('.highlight').each(function (i, e) {
+                var $wrap = $('<div>').addClass('highlight-wrap')
+                $(e).after($wrap)
+                $wrap.append(`<span class="copy-tips">复制</span>`)
+                let icon = `<i class="copy-btn">${copyIcon}</i>`
+                $wrap.append(icon).append(e)
+            })
+            $('.highlight-wrap .copy-btn').on('click', function () {
+                var code = $(this).parent().find(".code")[0].innerText
+                var ta = document.createElement('textarea')
+                document.body.appendChild(ta)
+                ta.style.position = 'absolute'
+                ta.style.top = '0px'
+                ta.style.left = '0px'
+                ta.value = code
+                ta.select()
+                ta.focus()
+                var result = document.execCommand('copy')
+                if(result){
+                    $(this).parent().children('.copy-tips').text('已复制')
+                }else{
+                    $(this).parent().children('.copy-tips').text('复制失败')
+                }
+               
+            }).mouseenter(function () {
+                $(this).parent().children('.copy-tips').stop().fadeIn()
+            }).mouseleave(function () {
+                $(this).parent().children('.copy-tips').stop().fadeOut().text('复制')
+            })
+        })
+    </script>
+    
+</body>
+</html>

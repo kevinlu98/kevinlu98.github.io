@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>（十）文章管理的多条件分页查询 | 冷文聊编辑</title>
+  <meta name="description" content="说明至此，我们已经将文章的新增及修改功能完成了，删除功能也由代码生成器给我们生成了，所以我们只剩下多条件分页查询功能了 上节遗留问题 我们上节课保存文章的时候有个问题就是我们查询对象使用了getOne方法，这个getOne方法是一个延迟查询，它不会立即查询数据库，只有当我们用到属性时才会进行查询， 查数据库看到我们的created及views字段还是null，所以我们应该用findById的方法查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（十）文章管理的多条件分页查询">
+<meta property="og:url" content="https://study.kevinlu98.cn/2022/10/06/springbootblog/12.%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2/index.html">
+<meta property="og:site_name" content="冷文聊编辑">
+<meta property="og:description" content="说明至此，我们已经将文章的新增及修改功能完成了，删除功能也由代码生成器给我们生成了，所以我们只剩下多条件分页查询功能了 上节遗留问题 我们上节课保存文章的时候有个问题就是我们查询对象使用了getOne方法，这个getOne方法是一个延迟查询，它不会立即查询数据库，只有当我们用到属性时才会进行查询， 查数据库看到我们的created及views字段还是null，所以我们应该用findById的方法查">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-06T07:21:00.000Z">
+<meta property="article:modified_time" content="2023-01-14T10:08:18.017Z">
+<meta property="article:author" content="Mr丶冷文">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springboot">
+<meta property="article:tag" content="个人博客">
+<meta name="twitter:card" content="summary">
+  <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://study.kevinlu98.cn/2022/10/06/springbootblog/12.%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/kevinlu98" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Mr丶冷文</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Golang Engineer &amp; Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanxi, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>冷文聊编辑【study.kevinlu98.cn】，主要分享B站教程中用到的课件及资料，主站为：<a target="_blank" rel="noopener" href="https://kevinlu98.cn">kevinlu98.cn</a>，欢迎大家访问<br><br>我也买了<a target="_blank" rel="noopener" href="https://www.itjc8.com/">https://www.itjc8.com/</a>这个网站的会员，大家如果在这个网站有想下载的东西请联系我，我发下载地址给大家</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a><span class="category-list-count">25</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/centos/" style="font-size: 13px;">centos</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/vmware/" style="font-size: 13px;">vmware</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;">个人博客</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/" style="font-size: 13.67px;">博客系统</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 13.33px;">异常处理</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/" class="title">（二）进入系统及简单命令</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/" class="title">（一）Linux 系列教程介绍</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time> <a href="/2022/10/10/springbootblog/25.%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD%E5%8F%8A%E6%89%93%E5%8C%85/" class="title">（二十三）登录功能及打包</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/24.%E5%90%8E%E5%8F%B0%E5%85%B6%E5%AE%83%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="title">（二十二）后台其它功能的实现</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/23.%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E6%8B%A6%E6%88%AA%E5%8F%8A%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E8%B7%B3%E8%BD%AC/" class="title">（二十一）统一异常拦截及自定义错误跳转</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E8%8A%82%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">上节遗留问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2"><span class="toc-number">3.</span> <span class="toc-text">服务端分页查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">定义条件查询参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%88%86%E9%A1%B5%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.2.</span> <span class="toc-text">定义分页返回对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Controller%E5%B1%82%E9%80%BB%E8%BE%91"><span class="toc-number">3.3.</span> <span class="toc-text">Controller层逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service%E5%8F%8AMapper%E7%9A%84%E9%80%BB%E8%BE%91"><span class="toc-number">3.4.</span> <span class="toc-text">Service及Mapper的逻辑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BSTable%E7%9A%84%E5%88%86%E9%A1%B5"><span class="toc-number">4.</span> <span class="toc-text">BSTable的分页</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%B9%E5%87%BB%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8%E7%9A%84%E5%88%86%E7%B1%BB%E5%AE%9E%E7%8E%B0%E5%B1%95%E7%A4%BA%E8%AF%A5%E5%88%86%E7%B1%BB%E4%B8%8B%E7%9A%84%E6%96%87%E7%AB%A0"><span class="toc-number">5.</span> <span class="toc-text">点击文章列表的分类实现展示该分类下的文章</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-springbootblog/12.文章管理的多条件分页查询" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      （十）文章管理的多条件分页查询
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/06/springbootblog/12.%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2/" class="article-date">
+	  <time datetime="2022-10-06T07:21:00.000Z" itemprop="datePublished">2022-10-06</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/06/springbootblog/12.%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>至此，我们已经将文章的新增及修改功能完成了，删除功能也由代码生成器给我们生成了，所以我们只剩下多条件分页查询功能了</p>
+<h2 id="上节遗留问题"><a href="#上节遗留问题" class="headerlink" title="上节遗留问题"></a>上节遗留问题</h2><ul>
+<li>我们上节课保存文章的时候有个问题就是我们查询对象使用了<code>getOne</code>方法，这个<code>getOne</code>方法是一个延迟查询，它不会立即查询数据库，只有当我们用到属性时才会进行查询， 查数据库看到我们的<code>created</code>及<code>views</code>字段还是<code>null</code>，所以我们应该用<code>findById</code>的方法查询对象再进行非空拷贝</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Article</span> <span class="variable">one</span> <span class="operator">=</span> detail(article.getId());</span><br><span class="line">UpdateUtil.copyNullProperties(article, one);</span><br><span class="line">mapper.save(one);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>还有就是一个小细节我们忘了设置图片在<code>input</code>中的回显</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">th:value</span>=<span class="string">&quot;$&#123;article.cover&#125;&quot;</span> <span class="attr">name</span>=<span class="string">&quot;cover&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="服务端分页查询"><a href="#服务端分页查询" class="headerlink" title="服务端分页查询"></a>服务端分页查询</h2><h3 id="定义条件查询参数"><a href="#定义条件查询参数" class="headerlink" title="定义条件查询参数"></a>定义条件查询参数</h3><ul>
+<li>类名：ArticleSearch</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cid</td>
+<td>整数</td>
+<td>分类id</td>
+</tr>
+<tr>
+<td>status</td>
+<td>整数</td>
+<td>状态</td>
+</tr>
+<tr>
+<td>title</td>
+<td>字符串</td>
+<td>标题关键字</td>
+</tr>
+<tr>
+<td>type</td>
+<td>整数</td>
+<td>文章类型</td>
+</tr>
+<tr>
+<td>pageNum</td>
+<td>整数</td>
+<td>页码</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>整数</td>
+<td>页大小</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.common;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Builder;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/9 21:13</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArticleSearch</span> &#123;</span><br><span class="line">    <span class="comment">//分类id</span></span><br><span class="line">    <span class="keyword">private</span> Integer cid;</span><br><span class="line">    <span class="comment">//状态</span></span><br><span class="line">    <span class="keyword">private</span> Integer status;</span><br><span class="line">    <span class="comment">//标题</span></span><br><span class="line">    <span class="keyword">private</span> String title;</span><br><span class="line">    <span class="comment">//文章类型</span></span><br><span class="line">    <span class="keyword">private</span> Integer type;</span><br><span class="line">    <span class="comment">//页码</span></span><br><span class="line">    <span class="keyword">private</span> Integer pageNum;</span><br><span class="line">    <span class="comment">//页大小</span></span><br><span class="line">    <span class="keyword">private</span> Integer pageSize;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="定义分页返回对象"><a href="#定义分页返回对象" class="headerlink" title="定义分页返回对象"></a>定义分页返回对象</h3><ul>
+<li>类名：PageHelper</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rows</td>
+<td>数组</td>
+<td>数据列表</td>
+</tr>
+<tr>
+<td>total</td>
+<td>整数</td>
+<td>总记录数</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.common;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Builder;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/9 21:15</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PageHelper</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="comment">// 数据列表</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;T&gt; rows;</span><br><span class="line">    <span class="comment">// 总记录数</span></span><br><span class="line">    <span class="keyword">private</span> Long total;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Controller层逻辑"><a href="#Controller层逻辑" class="headerlink" title="Controller层逻辑"></a>Controller层逻辑</h3><ul>
+<li>定义<code>search</code>接口</li>
+<li>修改错误或未填写的<code>pageNum</code>及<code>pageSize</code></li>
+<li>调用<code>service</code>层的搜索接口</li>
+<li>返回数据</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/search&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result&lt;PageHelper&lt;Article&gt;&gt; <span class="title function_">search</span><span class="params">(ArticleSearch search)</span> &#123;</span><br><span class="line">  search.setPageNum(Objects.isNull(search.getPageNum()) || search.getPageNum() &lt; <span class="number">1</span> ? <span class="number">1</span> : search.getPageNum());</span><br><span class="line">  search.setPageSize(Objects.isNull(search.getPageSize()) || search.getPageSize() &lt; <span class="number">1</span> ? <span class="number">1</span> : search.getPageSize());</span><br><span class="line">  PageHelper&lt;Article&gt; pageHelper = service.search(search);</span><br><span class="line">  <span class="keyword">return</span> Result.success(pageHelper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Service及Mapper的逻辑"><a href="#Service及Mapper的逻辑" class="headerlink" title="Service及Mapper的逻辑"></a>Service及Mapper的逻辑</h3><ul>
+<li>构建<code>Pageable</code>对象添加分页信息及排序信息</li>
+<li>让<code>Mapper</code>去继承<code>JpaSpecificationExecutor</code>复杂查询的查询使其具有复杂查询的功能</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ArticleMapper</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Article, Integer&gt;, JpaSpecificationExecutor&lt;Article&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用<code>findAll</code>方法传一个匿名内部类<code>Specification</code>的子类并重载<code>toPredicate</code>方法</li>
+<li>在<code>toPredicate</code>方法中创建<code>predicateList</code>条件数组来保存所有条件</li>
+<li>构建条件对象并加到<code>predicateList</code>数组中</li>
+<li>用<code>and</code>的方法拼接条件并返回</li>
+<li>构建出<code>PageHelper</code>对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> PageHelper&lt;Article&gt; <span class="title function_">search</span><span class="params">(ArticleSearch search)</span> &#123;</span><br><span class="line">  <span class="comment">//构建分页参数</span></span><br><span class="line">  <span class="type">Pageable</span> <span class="variable">pageable</span> <span class="operator">=</span> PageRequest.of(search.getPageNum() - <span class="number">1</span>, search.getPageSize(), Sort.by(Sort.Direction.DESC, <span class="string">&quot;created&quot;</span>));</span><br><span class="line">  Page&lt;Article&gt; articlePage = mapper.findAll((Specification&lt;Article&gt;) (root, query, builder) -&gt; &#123;</span><br><span class="line">    List&lt;Predicate&gt; predicateList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (Objects.nonNull(search.getCid())) &#123;</span><br><span class="line">      predicateList.add(builder.equal(root.get(<span class="string">&quot;category&quot;</span>), Category.builder().id(search.getCid()).build()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (Objects.nonNull(search.getStatus())) &#123;</span><br><span class="line">      predicateList.add(builder.equal(root.get(<span class="string">&quot;status&quot;</span>), search.getStatus()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (Objects.nonNull(search.getType())) &#123;</span><br><span class="line">      predicateList.add(builder.equal(root.get(<span class="string">&quot;type&quot;</span>), search.getType()));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!StringUtils.isEmptyOrWhitespace(search.getTitle())) &#123;</span><br><span class="line">      predicateList.add(builder.like(root.get(<span class="string">&quot;title&quot;</span>), <span class="string">&quot;%&quot;</span> + search.getTitle() + <span class="string">&quot;%&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> builder.and(predicateList.toArray(<span class="keyword">new</span> <span class="title class_">Predicate</span>[predicateList.size()]));</span><br><span class="line">  &#125;, pageable);</span><br><span class="line">  <span class="keyword">return</span> PageHelper.&lt;Article&gt;builder().rows(articlePage.getContent()).total(articlePage.getTotalElements()).build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="BSTable的分页"><a href="#BSTable的分页" class="headerlink" title="BSTable的分页"></a>BSTable的分页</h2><p>我们可以通过设置如下属性来实现分页功能 <a target="_blank" rel="noopener" href="https://bootstrap-table.com/docs/api/table-options/#sidepagination">https://bootstrap-table.com/docs/api/table-options/#sidepagination</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#table&#x27;</span>).<span class="title function_">bootstrapTable</span>(&#123;</span><br><span class="line">  <span class="attr">pageNumber</span>: <span class="number">1</span>, <span class="comment">//指定默认页码</span></span><br><span class="line">  <span class="attr">pagination</span>: <span class="literal">true</span>, <span class="comment">//开启分页</span></span><br><span class="line">  <span class="attr">sidePagination</span>: <span class="string">&#x27;server&#x27;</span>, <span class="comment">//使用服务端分页</span></span><br><span class="line">  <span class="attr">pageSize</span>: <span class="number">10</span>,<span class="comment">//默认页大小</span></span><br><span class="line">  <span class="attr">pageList</span>: [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>], <span class="comment">//可选页大小</span></span><br><span class="line">  <span class="comment">//bootstrap-table的分页数据是一个json，rows保存数据列表，total保存数据总数</span></span><br><span class="line">  <span class="attr">responseHandler</span>: <span class="keyword">function</span> (<span class="params">res</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">rows</span>: res.<span class="property">data</span>.<span class="property">rows</span>,</span><br><span class="line">      <span class="attr">total</span>: res.<span class="property">data</span>.<span class="property">total</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//这个是查询参数，就是bootstrap-table请求后端时携带的参数</span></span><br><span class="line">  <span class="attr">queryParams</span>: <span class="keyword">function</span> (<span class="params">params</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">pageNum</span>: (params.<span class="property">offset</span> / params.<span class="property">limit</span>) + <span class="number">1</span>,</span><br><span class="line">      <span class="attr">pageSize</span>: params.<span class="property">limit</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为搜索栏加上id</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">&quot;lw-search-form&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-inline&quot;</span> <span class="attr">style</span>=<span class="string">&quot;float:right;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>分类<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;lw-article-category&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span>全部<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">th:each</span>=<span class="string">&quot;category:$&#123;categories&#125;&quot;</span> <span class="attr">th:value</span>=<span class="string">&quot;$&#123;category.id&#125;&quot;</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;category.name&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>状态<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;lw-article-status&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span>全部<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;1&quot;</span>&gt;</span>发布<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2&quot;</span>&gt;</span>草稿<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>类型<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;lw-article-type&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 100px;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span>&gt;</span>全部<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;1&quot;</span>&gt;</span>文章<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;2&quot;</span>&gt;</span>页面<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>关键字<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;lw-keywords&quot;</span> <span class="attr">class</span>=<span class="string">&quot;form-control&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;请输入关键字...&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">class</span>=<span class="string">&quot;btn btn-primary&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;fa fa-search&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> 搜索<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改bootstraptable的配置使其可以分页</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#data-table&#x27;</span>).bootstrapTable(&#123;</span><br><span class="line">  url: <span class="string">&#x27;/admin/article/search&#x27;</span>,</span><br><span class="line">  pagination: <span class="literal">true</span>,</span><br><span class="line">  pageNumber: <span class="number">1</span>,</span><br><span class="line">  sidePagination: <span class="string">&#x27;server&#x27;</span>,</span><br><span class="line">  pageSize: <span class="number">10</span>,</span><br><span class="line">  pageList: [<span class="number">10</span>, <span class="number">20</span>, <span class="number">40</span>],</span><br><span class="line">  responseHandler: function (res) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.data</span><br><span class="line">  &#125;,</span><br><span class="line">  queryParams: function (params) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      pageNum: (params.offset / params.limit) + <span class="number">1</span>,</span><br><span class="line">      pageSize: params.limit,</span><br><span class="line">      title: $(<span class="string">&#x27;#lw-keywords&#x27;</span>).val(),</span><br><span class="line">      type: $(<span class="string">&#x27;#lw-article-type&#x27;</span>).val(),</span><br><span class="line">      status: $(<span class="string">&#x27;#lw-article-status&#x27;</span>).val(),</span><br><span class="line">      cid: $(<span class="string">&#x27;#lw-article-category&#x27;</span>).val()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  columns: [</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;序号&#x27;</span>,</span><br><span class="line">      width: <span class="number">50</span>,</span><br><span class="line">      align: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">      formatter: function (value, row, index) &#123;</span><br><span class="line">        <span class="keyword">return</span> index + <span class="number">1</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;标题&#x27;</span>,</span><br><span class="line">      field: <span class="string">&#x27;title&#x27;</span>,</span><br><span class="line">      formatter: function (value, row) &#123;</span><br><span class="line">        <span class="keyword">return</span> `&lt;a href=<span class="string">&quot;/admin/write.html?id=$&#123;row.id&#125;&quot;</span>&gt;$&#123;value&#125;&lt;/a&gt;`</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;状态&#x27;</span>,</span><br><span class="line">      field: <span class="string">&#x27;status&#x27;</span>,</span><br><span class="line">      formatter: function (value) &#123;</span><br><span class="line">        <span class="keyword">return</span> value === <span class="number">1</span> ? <span class="string">&#x27;发布&#x27;</span> : <span class="string">&#x27;草稿&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;分类&#x27;</span>,</span><br><span class="line">      field: <span class="string">&#x27;category&#x27;</span>,</span><br><span class="line">      formatter: function (value) &#123;</span><br><span class="line">        <span class="keyword">return</span> value.name</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;浏览量&#x27;</span>,</span><br><span class="line">      field: <span class="string">&#x27;views&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      title: <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">      field: <span class="string">&#x27;created&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      field: <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">      title: <span class="string">&#x27;操作&#x27;</span>,</span><br><span class="line">      width: <span class="number">100</span>,</span><br><span class="line">      formatter: function (value) &#123;</span><br><span class="line">        <span class="keyword">return</span> `&lt;button type=<span class="string">&quot;button&quot;</span> data-id=<span class="string">&quot;$&#123;value&#125;&quot;</span> class=<span class="string">&quot;btn btn-danger btn-sm lw-del-btn&quot;</span>&gt;&lt;i class=<span class="string">&quot;fa fa-trash&quot;</span>&gt;&lt;/i&gt; 删除&lt;/button&gt;`</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>阻止搜索表单提交，在其提交时重载表格</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#lw-search-form&#x27;</span>).<span class="title function_">on</span>(<span class="string">&#x27;submit&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  $(<span class="string">&#x27;#data-table&#x27;</span>).<span class="title function_">bootstrapTable</span>(<span class="string">&#x27;refresh&#x27;</span>, &#123;<span class="attr">silent</span>: <span class="literal">true</span>, <span class="attr">pageNumber</span>: <span class="number">1</span>&#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="点击文章列表的分类实现展示该分类下的文章"><a href="#点击文章列表的分类实现展示该分类下的文章" class="headerlink" title="点击文章列表的分类实现展示该分类下的文章"></a>点击文章列表的分类实现展示该分类下的文章</h2><ul>
+<li>修改分类的展示样式</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;分类&#x27;</span>,</span><br><span class="line">    <span class="attr">field</span>: <span class="string">&#x27;category&#x27;</span>,</span><br><span class="line">      <span class="attr">formatter</span>: <span class="keyword">function</span> (<span class="params">value</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">`&lt;a class=&quot;lw-category-table&quot; href=&quot;javascript:void(0)&quot; data-id=&quot;<span class="subst">$&#123;value.id&#125;</span>&quot;&gt;<span class="subst">$&#123;value.name&#125;</span>&lt;/a&gt;`</span></span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>点击文章分类时将表单的值置为空</li>
+<li>将分类的选择框的值置为点击的值</li>
+<li>重载表格</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;#data-table&quot;</span>).<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;.lw-category-table&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> cid = $(<span class="variable language_">this</span>).<span class="title function_">data</span>(<span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">  $(<span class="string">&#x27;#lw-reset&#x27;</span>).<span class="title function_">click</span>()</span><br><span class="line">  $(<span class="string">&#x27;#lw-article-category&#x27;</span>).<span class="title function_">val</span>(cid)</span><br><span class="line">  $(<span class="string">&#x27;#data-table&#x27;</span>).<span class="title function_">bootstrapTable</span>(<span class="string">&#x27;refresh&#x27;</span>, &#123;<span class="attr">silent</span>: <span class="literal">true</span>, <span class="attr">pageNumber</span>: <span class="number">1</span>&#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://study.kevinlu98.cn/2022/10/06/springbootblog/12.%E6%96%87%E7%AB%A0%E7%AE%A1%E7%90%86%E7%9A%84%E5%A4%9A%E6%9D%A1%E4%BB%B6%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2/" title="（十）文章管理的多条件分页查询" target="_blank" rel="external">https://study.kevinlu98.cn/2022/10/06/springbootblog/12.文章管理的多条件分页查询/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/kevinlu98" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/kevinlu98" target="_blank"><span class="text-dark">Mr丶冷文</span><small class="ml-1x">Golang Engineer &amp; Web Developer</small></a></h3>
+        <div>喜欢网站设计、coding、爱折腾，一个不折不扣的小码农</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/06/springbootblog/13.%E5%AE%8C%E6%88%90%E5%AF%BC%E8%88%AA%E7%AE%A1%E7%90%86%E5%8F%8A%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="（十一）完成导航管理及统一异常处理"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/06/springbootblog/11.%E5%AE%8C%E6%88%90%E6%96%B0%E5%A2%9E%E5%8F%8A%E7%BC%96%E8%BE%91%E6%96%87%E7%AB%A0%E5%8A%9F%E8%83%BD/" title="（九）完成新增及编辑文章功能"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 Mr丶冷文 
+        
+        
+            <a target="_blank" href="https://beian.miit.gov.cn">陕ICP备19024566-1号</a>
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '8e99fb35d3204ac0e84f',
+    clientSecret: '50644825509a07e9c7ec2c206dae2d0cc6c78bb7',
+    repo: 'kevinlu98.github.io',
+    owner: 'kevinlu98',
+    admin: ['kevinlu98'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+
+
+
+
+  
+    <style>
+        .highlight-wrap .copy-btn {
+            display: inline-block;
+            padding: 2px 6px;
+            position: absolute;
+            right: 4px;
+            top: 36px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .highlight-wrap .copy-tips {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            top: 36px;
+            right: 36px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background-color: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .highlight-wrap .copy-tips::before {
+            content: '◆';
+            color: #000;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+        }
+
+
+
+        .highlight-wrap {
+            position: relative;
+        }
+    </style>
+    <script>
+        addLoadEvent(() => {
+            let copyIcon = `<svg t="1673632770304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2720" width="20" height="20"><path d="M857.373005 65.290005 469.604424 65.290005c-34.211173 0-62.044078 27.832905-62.044078 62.043055l0 10.340509-63.076594 0c-25.993001 0-48.228421 16.346293-57.001225 39.293935L166.626995 176.967504c-34.21015 0-62.043055 27.832905-62.043055 62.043055l0 657.655358c0 34.21015 27.832905 62.043055 62.043055 62.043055l550.115086 0c34.21015 0 62.043055-27.832905 62.043055-62.043055l0-49.634444 78.587869 0c34.21015 0 62.043055-27.832905 62.043055-62.043055L919.41606 127.33306C919.41606 93.122911 891.583155 65.290005 857.373005 65.290005zM344.483752 179.035606l194.402595 0c10.833743 0 19.646456 8.813736 19.646456 19.646456 0 10.833743-8.813736 19.646456-19.646456 19.646456L344.483752 218.328517c-10.833743 0-19.646456-8.813736-19.646456-19.646456C324.836273 187.849342 333.650009 179.035606 344.483752 179.035606zM737.423099 896.665917c0 11.402701-9.278317 20.681018-20.681018 20.681018L166.626995 917.346935c-11.403724 0-20.681018-9.278317-20.681018-20.681018L145.945977 239.010559c0-11.402701 9.277294-20.681018 20.681018-20.681018l120.111588 0c8.197706 24.02723 30.977525 41.362037 57.744145 41.362037l194.402595 0c26.767644 0 49.54644-17.334807 57.744145-41.362037l120.111588 0c11.402701 0 20.681018 9.278317 20.681018 20.681018L737.422076 896.665917zM878.054023 784.988418c0 11.402701-9.278317 20.681018-20.681018 20.681018l-78.587869 0L778.785136 239.010559c0-34.21015-27.832905-62.043055-62.043055-62.043055L595.886549 176.967504c-8.771781-22.947641-31.007201-39.293935-57.001225-39.293935l-89.963964 0L448.921359 127.33306c0-11.403724 9.278317-20.681018 20.683065-20.681018l387.768581 0c11.402701 0 20.681018 9.277294 20.681018 20.681018L878.054023 784.988418z" fill="#272636" p-id="2721"></path><path d="M620.597347 334.252737 260.748652 334.252737c-11.422144 0-20.681018 9.259898-20.681018 20.681018s9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018S632.018467 334.252737 620.597347 334.252737z" fill="#272636" p-id="2722"></path><path d="M620.597347 454.201619 260.748652 454.201619c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C641.278365 463.46254 632.018467 454.201619 620.597347 454.201619z" fill="#272636" p-id="2723"></path><path d="M440.673511 574.151525 260.748652 574.151525c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l179.924859 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C461.35453 583.411423 452.093609 574.151525 440.673511 574.151525z" fill="#272636" p-id="2724"></path></svg>`
+            $('.highlight').each(function (i, e) {
+                var $wrap = $('<div>').addClass('highlight-wrap')
+                $(e).after($wrap)
+                $wrap.append(`<span class="copy-tips">复制</span>`)
+                let icon = `<i class="copy-btn">${copyIcon}</i>`
+                $wrap.append(icon).append(e)
+            })
+            $('.highlight-wrap .copy-btn').on('click', function () {
+                var code = $(this).parent().find(".code")[0].innerText
+                var ta = document.createElement('textarea')
+                document.body.appendChild(ta)
+                ta.style.position = 'absolute'
+                ta.style.top = '0px'
+                ta.style.left = '0px'
+                ta.value = code
+                ta.select()
+                ta.focus()
+                var result = document.execCommand('copy')
+                if(result){
+                    $(this).parent().children('.copy-tips').text('已复制')
+                }else{
+                    $(this).parent().children('.copy-tips').text('复制失败')
+                }
+               
+            }).mouseenter(function () {
+                $(this).parent().children('.copy-tips').stop().fadeIn()
+            }).mouseleave(function () {
+                $(this).parent().children('.copy-tips').stop().fadeOut().text('复制')
+            })
+        })
+    </script>
+    
+</body>
+</html>

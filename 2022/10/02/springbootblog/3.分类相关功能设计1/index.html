@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>（三）分类相关功能设计（上） | 冷文聊编辑</title>
+  <meta name="description" content="实体&#x2F;数据库定义 类名：Category  表名：blog_category  属性      名称 中文名 类型    id 主键 整数   name 名称 字符串   summary 介绍 字符串   JPA注解说明   名称 位置 说明    @Entity 类 表示被注解的类是一个可以被JPA管理的实体类   @Table 类 当实体类与其映射的数据库表名不同名时需要使用   @">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（三）分类相关功能设计（上）">
+<meta property="og:url" content="https://study.kevinlu98.cn/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/index.html">
+<meta property="og:site_name" content="冷文聊编辑">
+<meta property="og:description" content="实体&#x2F;数据库定义 类名：Category  表名：blog_category  属性      名称 中文名 类型    id 主键 整数   name 名称 字符串   summary 介绍 字符串   JPA注解说明   名称 位置 说明    @Entity 类 表示被注解的类是一个可以被JPA管理的实体类   @Table 类 当实体类与其映射的数据库表名不同名时需要使用   @">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-01T18:21:00.000Z">
+<meta property="article:modified_time" content="2023-01-14T10:08:18.018Z">
+<meta property="article:author" content="Mr丶冷文">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="springboot">
+<meta property="article:tag" content="个人博客">
+<meta name="twitter:card" content="summary">
+  <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://study.kevinlu98.cn/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/kevinlu98" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Mr丶冷文</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Golang Engineer &amp; Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanxi, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>冷文聊编辑【study.kevinlu98.cn】，主要分享B站教程中用到的课件及资料，主站为：<a target="_blank" rel="noopener" href="https://kevinlu98.cn">kevinlu98.cn</a>，欢迎大家访问<br><br>我也买了<a target="_blank" rel="noopener" href="https://www.itjc8.com/">https://www.itjc8.com/</a>这个网站的会员，大家如果在这个网站有想下载的东西请联系我，我发下载地址给大家</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a><span class="category-list-count">25</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/centos/" style="font-size: 13px;">centos</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/linux/" style="font-size: 13px;">linux</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/vmware/" style="font-size: 13px;">vmware</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;">个人博客</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/" style="font-size: 13.67px;">博客系统</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 13.33px;">异常处理</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/2.%E8%BF%9B%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%8F%8A%E7%AE%80%E5%8D%95%E5%91%BD%E4%BB%A4/" class="title">（二）进入系统及简单命令</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T15:25:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time> <a href="/2023/01/13/linux/1.Linux%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B%E4%BB%8B%E7%BB%8D/" class="title">（一）Linux 系列教程介绍</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-13T14:23:00.000Z" itemprop="datePublished">2023-01-13</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time> <a href="/2022/10/10/springbootblog/25.%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD%E5%8F%8A%E6%89%93%E5%8C%85/" class="title">（二十三）登录功能及打包</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-09T18:21:00.000Z" itemprop="datePublished">2022-10-10</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/24.%E5%90%8E%E5%8F%B0%E5%85%B6%E5%AE%83%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="title">（二十二）后台其它功能的实现</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T18:21:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time> <a href="/2022/10/09/springbootblog/23.%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E6%8B%A6%E6%88%AA%E5%8F%8A%E8%87%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF%E8%B7%B3%E8%BD%AC/" class="title">（二十一）统一异常拦截及自定义错误跳转</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2022-10-08T17:22:00.000Z" itemprop="datePublished">2022-10-09</time>
+              </p> -->
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93-x2F-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9A%E4%B9%89"><span class="toc-number">1.</span> <span class="toc-text">实体&#x2F;数据库定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JPA%E6%B3%A8%E8%A7%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">JPA注解说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%AE%9A%E4%B9%89%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">分实体类定义完整代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA%E5%A2%9E%E5%88%A0%E6%9F%A5%E6%94%B9%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">JPA增删查改操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringBootTest%E7%B1%BB%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">2.1.</span> <span class="toc-text">SpringBootTest类进行测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%88%90service%E5%B1%82%E5%A2%9E%E5%88%A0%E6%9F%A5%E6%94%B9%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.</span> <span class="toc-text">完成service层增删查改操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Controller%E5%B1%82%E5%BC%80%E5%8F%91"><span class="toc-number">3.</span> <span class="toc-text">Controller层开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E5%AE%9E%E4%BD%93"><span class="toc-number">3.1.</span> <span class="toc-text">公共返回实体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E6%9E%9A%E4%B8%BE%E5%AE%9A%E4%B9%89"><span class="toc-number">3.2.</span> <span class="toc-text">返回枚举定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%85%AC%E5%85%B1%E8%BF%94%E5%9B%9E%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">3.3.</span> <span class="toc-text">定义公共返回类的静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%88%90%E5%88%86%E7%B1%BB%E5%88%97%E8%A1%A8%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%BC%80%E5%8F%91"><span class="toc-number">3.4.</span> <span class="toc-text">完成分类列表接口的开发</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-springbootblog/3.分类相关功能设计1" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      （三）分类相关功能设计（上）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/" class="article-date">
+	  <time datetime="2022-10-01T18:21:00.000Z" itemprop="datePublished">2022-10-02</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/java/" rel="tag">java</a>, <a class="article-tag-link-link" href="/tags/springboot/" rel="tag">springboot</a>, <a class="article-tag-link-link" href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag">个人博客</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="实体-x2F-数据库定义"><a href="#实体-x2F-数据库定义" class="headerlink" title="实体&#x2F;数据库定义"></a>实体&#x2F;数据库定义</h2><ul>
+<li><p>类名：Category</p>
+</li>
+<li><p>表名：blog_category</p>
+</li>
+<li><p>属性</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>中文名</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>主键</td>
+<td>整数</td>
+</tr>
+<tr>
+<td>name</td>
+<td>名称</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>summary</td>
+<td>介绍</td>
+<td>字符串</td>
+</tr>
+</tbody></table>
+<h3 id="JPA注解说明"><a href="#JPA注解说明" class="headerlink" title="JPA注解说明"></a>JPA注解说明</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>位置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Entity</td>
+<td>类</td>
+<td>表示被注解的类是一个可以被JPA管理的实体类</td>
+</tr>
+<tr>
+<td>@Table</td>
+<td>类</td>
+<td>当实体类与其映射的数据库表名不同名时需要使用</td>
+</tr>
+<tr>
+<td>@Column</td>
+<td>属性</td>
+<td>当实体的属性与其映射的数据库表的列不同名时需要使用该标注说明，Column 标注的常用属性是 name，用于设置映射数据库表的列名。此外，该标注还包含其它多个属性，如：unique 、nullable、length 等</td>
+</tr>
+<tr>
+<td>@Id</td>
+<td>属性</td>
+<td>标注用于声明一个实体类的属性映射为数据库的主键列</td>
+</tr>
+<tr>
+<td>@GeneratedValue</td>
+<td>属性</td>
+<td>主要就是为一个实体生成一个唯一标识的主键、提供了主键的生成策略，比如IDENTITY就是自增主键，这个也是用的最多的</td>
+</tr>
+</tbody></table>
+<h3 id="分实体类定义完整代码"><a href="#分实体类定义完整代码" class="headerlink" title="分实体类定义完整代码"></a>分实体类定义完整代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Builder;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.Column;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GeneratedValue;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GenerationType;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Table;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 21:56</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@Table(name = &quot;blog_category&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Category</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置主键自增</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(unique = true)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String summary;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="JPA增删查改操作"><a href="#JPA增删查改操作" class="headerlink" title="JPA增删查改操作"></a>JPA增删查改操作</h2><p>在jpa中只需要定义一个接口继承下<code>JpaRepository</code>接口就可以拥有对该实体类对应的数据库表最基本的增删查改操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.pojo.Category;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 22:04</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">CategoryMapper</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Category, Integer&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="SpringBootTest类进行测试"><a href="#SpringBootTest类进行测试" class="headerlink" title="SpringBootTest类进行测试"></a>SpringBootTest类进行测试</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.Application;</span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.mapper.CategoryMapper;</span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.pojo.Category;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"><span class="keyword">import</span> org.springframework.test.context.junit4.SpringRunner;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 22:02</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RunWith(SpringRunner.class)</span></span><br><span class="line"><span class="meta">@SpringBootTest(classes = &#123;Application.class&#125;, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CategoryTest</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CategoryMapper mapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">newEntity</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Category</span> <span class="variable">c1</span> <span class="operator">=</span> Category.builder().id(<span class="number">1</span>).name(<span class="string">&quot;xx&quot;</span>).summary(<span class="string">&quot;Qqq&quot;</span>).build();</span><br><span class="line">        System.out.println(c1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMapper</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(mapper);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testUpdate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Category</span> <span class="variable">category</span> <span class="operator">=</span> mapper.findById(<span class="number">1</span>).orElse(<span class="literal">null</span>);</span><br><span class="line">        System.out.println(category);</span><br><span class="line">        category.setName(<span class="string">&quot;新分类&quot;</span>);</span><br><span class="line">        mapper.save(category);</span><br><span class="line">        System.out.println(mapper.findById(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testAdd</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//save 如果这个对象的id不为null，它就是一个update，反之就是一个insert</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>; i &lt; <span class="number">20</span>; i++) &#123;</span><br><span class="line">            mapper.save(Category.builder().name(<span class="string">&quot;测试分类&quot;</span> + i).summary(<span class="string">&quot;我是一个描述字段&quot;</span> + i + <span class="string">&quot;...&quot;</span>).build());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testFind</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(mapper.findAll());</span><br><span class="line"></span><br><span class="line">        System.out.println(mapper.findById(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="完成service层增删查改操作"><a href="#完成service层增删查改操作" class="headerlink" title="完成service层增删查改操作"></a>完成service层增删查改操作</h3><ul>
+<li>查询所有</li>
+<li>查询总数</li>
+<li>查询单个对象</li>
+<li>保存(新增&#x2F;更新)</li>
+<li>删除</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.mapper.CategoryMapper;</span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.pojo.Category;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 22:20</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CategoryService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CategoryMapper mapper;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">CategoryService</span><span class="params">(CategoryMapper mapper)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.mapper = mapper;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有的分类</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 分类列表</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Category&gt; <span class="title function_">list</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mapper.findAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询分类总数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 分类总数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">count</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mapper.count();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * id查询资源详情</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id 主键</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 分类详情</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> Category <span class="title function_">detail</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> mapper.findById(id).orElse(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存操作</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> category 要保存的对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">save</span><span class="params">(Category category)</span> &#123;</span><br><span class="line">        mapper.save(category);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据id从数据库表中删除数据</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id 主键</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        mapper.deleteById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Controller层开发"><a href="#Controller层开发" class="headerlink" title="Controller层开发"></a>Controller层开发</h2><h3 id="公共返回实体"><a href="#公共返回实体" class="headerlink" title="公共返回实体"></a>公共返回实体</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>code</td>
+<td>整数</td>
+<td>返回的状态，200表示成功，其它表示失败</td>
+</tr>
+<tr>
+<td>message</td>
+<td>字符串</td>
+<td>返回的消息</td>
+</tr>
+<tr>
+<td>data</td>
+<td>对象</td>
+<td>返回的具体数据</td>
+</tr>
+</tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.common;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.kevinlu98.enums.ResultEnum;</span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 22:26</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Result</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Result</span><span class="params">(ResultEnum resultEnum)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.code = resultEnum.getCode();</span><br><span class="line">        <span class="built_in">this</span>.message = resultEnum.getMessage();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Result</span><span class="params">(ResultEnum resultEnum, T data)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.code = resultEnum.getCode();</span><br><span class="line">        <span class="built_in">this</span>.message = resultEnum.getMessage();</span><br><span class="line">        <span class="built_in">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="返回枚举定义"><a href="#返回枚举定义" class="headerlink" title="返回枚举定义"></a>返回枚举定义</h3><p>定义一个有两个属性的枚举，<code>code</code>与<code>message</code>，然后定义成功与失败的枚举常量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.kevinlu98.enums;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Author: Mr丶冷文</span></span><br><span class="line"><span class="comment"> * Date: 2022/10/6 22:27</span></span><br><span class="line"><span class="comment"> * Email: kevinlu98@qq.com</span></span><br><span class="line"><span class="comment"> * Description:</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">ResultEnum</span> &#123;</span><br><span class="line">    RESULT_SUCCESS(<span class="number">200</span>, <span class="string">&quot;操作成功&quot;</span>),</span><br><span class="line">    RESULT_ERROR(<span class="number">500</span>, <span class="string">&quot;系统错误&quot;</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String message;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="定义公共返回类的静态方法"><a href="#定义公共返回类的静态方法" class="headerlink" title="定义公共返回类的静态方法"></a>定义公共返回类的静态方法</h3><p>定义成功及失败的静态方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Result&lt;T&gt; <span class="title function_">success</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;&gt;(ResultEnum.RESULT_SUCCESS);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Result&lt;T&gt; <span class="title function_">success</span><span class="params">(T data)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;&gt;(ResultEnum.RESULT_SUCCESS, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Result&lt;T&gt; <span class="title function_">error</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;&gt;(ResultEnum.RESULT_ERROR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Result&lt;T&gt; <span class="title function_">error</span><span class="params">(ResultEnum resultEnum)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;&gt;(resultEnum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Result&lt;T&gt; <span class="title function_">error</span><span class="params">(<span class="type">int</span> code, String message)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;&gt;(code, message, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="完成分类列表接口的开发"><a href="#完成分类列表接口的开发" class="headerlink" title="完成分类列表接口的开发"></a>完成分类列表接口的开发</h3><p>接口定义:</p>
+<p>url: &#x2F;admin&#x2F;category&#x2F;</p>
+<p>method: get</p>
+<p>Params: none</p>
+<p>Result:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  code<span class="punctuation">:</span><span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">  message<span class="punctuation">:</span><span class="string">&quot;成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">  data<span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      id<span class="punctuation">:</span><span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">      name<span class="punctuation">:</span><span class="string">&quot;分类1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      summary<span class="punctuation">:</span><span class="string">&quot;我是描述&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      id<span class="punctuation">:</span><span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">      name<span class="punctuation">:</span><span class="string">&quot;分类2&quot;</span><span class="punctuation">,</span></span><br><span class="line">      summary<span class="punctuation">:</span><span class="string">&quot;我是描述&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result&lt;List&lt;Category&gt;&gt; <span class="title function_">list</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Result.success(service.list());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://study.kevinlu98.cn/2022/10/02/springbootblog/3.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A11/" title="（三）分类相关功能设计（上）" target="_blank" rel="external">https://study.kevinlu98.cn/2022/10/02/springbootblog/3.分类相关功能设计1/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/kevinlu98" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/kevinlu98" target="_blank"><span class="text-dark">Mr丶冷文</span><small class="ml-1x">Golang Engineer &amp; Web Developer</small></a></h3>
+        <div>喜欢网站设计、coding、爱折腾，一个不折不扣的小码农</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/02/springbootblog/4.%E5%88%86%E7%B1%BB%E7%9B%B8%E5%85%B3%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A12/" title="（三）分类相关功能设计（下）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/01/springbootblog/2.%E7%AE%A1%E7%90%86%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%AF%BC%E5%85%A5%E5%8F%8AThymeleaf%E9%85%8D%E7%BD%AE/" title="（二）管理页面的导入及Thymeleaf配置"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 Mr丶冷文 
+        
+        
+            <a target="_blank" href="https://beian.miit.gov.cn">陕ICP备19024566-1号</a>
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '8e99fb35d3204ac0e84f',
+    clientSecret: '50644825509a07e9c7ec2c206dae2d0cc6c78bb7',
+    repo: 'kevinlu98.github.io',
+    owner: 'kevinlu98',
+    admin: ['kevinlu98'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+
+
+
+
+  
+    <style>
+        .highlight-wrap .copy-btn {
+            display: inline-block;
+            padding: 2px 6px;
+            position: absolute;
+            right: 4px;
+            top: 36px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .highlight-wrap .copy-tips {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            top: 36px;
+            right: 36px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background-color: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .highlight-wrap .copy-tips::before {
+            content: '◆';
+            color: #000;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+        }
+
+
+
+        .highlight-wrap {
+            position: relative;
+        }
+    </style>
+    <script>
+        addLoadEvent(() => {
+            let copyIcon = `<svg t="1673632770304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2720" width="20" height="20"><path d="M857.373005 65.290005 469.604424 65.290005c-34.211173 0-62.044078 27.832905-62.044078 62.043055l0 10.340509-63.076594 0c-25.993001 0-48.228421 16.346293-57.001225 39.293935L166.626995 176.967504c-34.21015 0-62.043055 27.832905-62.043055 62.043055l0 657.655358c0 34.21015 27.832905 62.043055 62.043055 62.043055l550.115086 0c34.21015 0 62.043055-27.832905 62.043055-62.043055l0-49.634444 78.587869 0c34.21015 0 62.043055-27.832905 62.043055-62.043055L919.41606 127.33306C919.41606 93.122911 891.583155 65.290005 857.373005 65.290005zM344.483752 179.035606l194.402595 0c10.833743 0 19.646456 8.813736 19.646456 19.646456 0 10.833743-8.813736 19.646456-19.646456 19.646456L344.483752 218.328517c-10.833743 0-19.646456-8.813736-19.646456-19.646456C324.836273 187.849342 333.650009 179.035606 344.483752 179.035606zM737.423099 896.665917c0 11.402701-9.278317 20.681018-20.681018 20.681018L166.626995 917.346935c-11.403724 0-20.681018-9.278317-20.681018-20.681018L145.945977 239.010559c0-11.402701 9.277294-20.681018 20.681018-20.681018l120.111588 0c8.197706 24.02723 30.977525 41.362037 57.744145 41.362037l194.402595 0c26.767644 0 49.54644-17.334807 57.744145-41.362037l120.111588 0c11.402701 0 20.681018 9.278317 20.681018 20.681018L737.422076 896.665917zM878.054023 784.988418c0 11.402701-9.278317 20.681018-20.681018 20.681018l-78.587869 0L778.785136 239.010559c0-34.21015-27.832905-62.043055-62.043055-62.043055L595.886549 176.967504c-8.771781-22.947641-31.007201-39.293935-57.001225-39.293935l-89.963964 0L448.921359 127.33306c0-11.403724 9.278317-20.681018 20.683065-20.681018l387.768581 0c11.402701 0 20.681018 9.277294 20.681018 20.681018L878.054023 784.988418z" fill="#272636" p-id="2721"></path><path d="M620.597347 334.252737 260.748652 334.252737c-11.422144 0-20.681018 9.259898-20.681018 20.681018s9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018S632.018467 334.252737 620.597347 334.252737z" fill="#272636" p-id="2722"></path><path d="M620.597347 454.201619 260.748652 454.201619c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C641.278365 463.46254 632.018467 454.201619 620.597347 454.201619z" fill="#272636" p-id="2723"></path><path d="M440.673511 574.151525 260.748652 574.151525c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l179.924859 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C461.35453 583.411423 452.093609 574.151525 440.673511 574.151525z" fill="#272636" p-id="2724"></path></svg>`
+            $('.highlight').each(function (i, e) {
+                var $wrap = $('<div>').addClass('highlight-wrap')
+                $(e).after($wrap)
+                $wrap.append(`<span class="copy-tips">复制</span>`)
+                let icon = `<i class="copy-btn">${copyIcon}</i>`
+                $wrap.append(icon).append(e)
+            })
+            $('.highlight-wrap .copy-btn').on('click', function () {
+                var code = $(this).parent().find(".code")[0].innerText
+                var ta = document.createElement('textarea')
+                document.body.appendChild(ta)
+                ta.style.position = 'absolute'
+                ta.style.top = '0px'
+                ta.style.left = '0px'
+                ta.value = code
+                ta.select()
+                ta.focus()
+                var result = document.execCommand('copy')
+                if(result){
+                    $(this).parent().children('.copy-tips').text('已复制')
+                }else{
+                    $(this).parent().children('.copy-tips').text('复制失败')
+                }
+               
+            }).mouseenter(function () {
+                $(this).parent().children('.copy-tips').stop().fadeIn()
+            }).mouseleave(function () {
+                $(this).parent().children('.copy-tips').stop().fadeOut().text('复制')
+            })
+        })
+    </script>
+    
+</body>
+</html>
