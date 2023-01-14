@@ -9216,6 +9216,19 @@ body.okayNav-loaded {
   color: #FE9200;
 }
 
+.notice-donate{
+  display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    width: 60%;
+}
+
+#board p{
+  margin-bottom: 10px;
+}
+
 @media (max-device-width: 480px) and (orientation: landscape) {
   .navbar-fixed-top .navbar-collapse,
   .navbar-fixed-bottom .navbar-collapse {
