@@ -9207,6 +9207,15 @@ body.okayNav-loaded {
   }
 }
 
+.has-sticky li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.has-sticky code {
+  color: #FE9200;
+}
+
 @media (max-device-width: 480px) and (orientation: landscape) {
   .navbar-fixed-top .navbar-collapse,
   .navbar-fixed-bottom .navbar-collapse {
