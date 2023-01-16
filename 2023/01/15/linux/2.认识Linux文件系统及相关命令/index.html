@@ -27,7 +27,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/b8ipofh4gn1669448309044.png">
 <meta property="article:published_time" content="2023-01-14T18:51:00.000Z">
-<meta property="article:modified_time" content="2023-01-15T12:36:41.679Z">
+<meta property="article:modified_time" content="2023-01-16T14:18:48.563Z">
 <meta property="article:author" content="Mr丶冷文">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="vmware">
@@ -417,7 +417,7 @@
 <p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20221126/b8ipofh4gn1669448309044.png" alt="img"></p>
 <h3 id="常见的二级目录"><a href="#常见的二级目录" class="headerlink" title="常见的二级目录"></a>常见的二级目录</h3><ul>
 <li>&#x2F;bin：存放二进制可执行命令目录</li>
-<li><strong>&#x2F;home：用户主目录的基点目录，默认情况每个用户主目录都设在该目录下，如默认：用户user01的主目录是&#x2F;home&#x2F;user01，可用~user01表示</strong></li>
+<li><strong>&#x2F;home：用户主目录的基点目录，默认情况每个用户主目录都设在该目录下，如默认：用户user01的主目录是&#x2F;home&#x2F;user01，可用~&#x2F;user01表示</strong></li>
 <li>&#x2F;lib：存放标准程序设计库目录，又叫动态链接共享库目录，目录中文件类似windows里的后缀名为dll的文件</li>
 <li><strong>&#x2F;etc：存放系统管理和配置文件目录</strong></li>
 <li>&#x2F;dev：存放设备特殊文件目录，如声卡文件，磁盘文件等</li>
@@ -438,6 +438,8 @@
 <li><p><code>..</code>：代表父级目录</p>
 </li>
 <li><p><code>/</code>：linux中文件分隔或根目录</p>
+</li>
+<li><p><code>~</code>：当前用户的家目录</p>
 </li>
 </ul>
 </li>
@@ -489,7 +491,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="命令的帮助"><a href="#命令的帮助" class="headerlink" title="命令的帮助"></a>命令的帮助</h3><h4 id="–help"><a href="#–help" class="headerlink" title="–help"></a>–help</h4><p>通常情况下，我们在linux中可以使用<code>命令名称 --help</code>来查看一个命令的帮助信息，当然也有些开发着没有为命令写对应的帮助信息，但我们用到的系统命令都是有很标签的多语的帮助信息的</p>
+<h3 id="命令的帮助"><a href="#命令的帮助" class="headerlink" title="命令的帮助"></a>命令的帮助</h3><h4 id="–help"><a href="#–help" class="headerlink" title="–help"></a>–help</h4><p>通常情况下，我们在linux中可以使用<code>命令名称 --help</code>来查看一个命令的帮助信息，当然也有些开发着没有为命令写对应的帮助信息，但我们用到的系统命令都是有很标准的命令，都是有帮助信息的</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name --help</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">例</span></span><br><span class="line">vim --help</span><br></pre></td></tr></table></figure>
 
 <p>帮助文档中的一些符号解释</p>
