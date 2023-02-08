@@ -9207,18 +9207,18 @@ body.okayNav-loaded {
   }
 }
 
-.has-sticky li {
+.marked-body li {
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-.has-sticky img {
+.marked-body img {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
 
 
-.has-sticky code {
+.marked-body code {
   color: #FE9200;
 }
 

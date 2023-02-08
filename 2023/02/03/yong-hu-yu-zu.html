@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>(六)Linux用户与权限 | 冷文聊编辑</title>
+  <meta name="description" content="前言经过前面几节课的学习，我们应该是慢慢的可以脱离Linux的图形窗口了，这节课带大家认识下Linux中的用户与权限，这节课学完后面我们大部分情况下甚至都不用在虚拟机上去操作我们的Linux了 用户与组与权限用户首先我要了解到Linux 是多用户多任务的分时操作系统，看到这句话是不是懵了，什么是多用户？什么是多任务？什么是分时？ 其时上面那句话这样说大家就明白了，Linux 系统支持多个用户在同一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(六)Linux用户与权限">
+<meta property="og:url" content="https://study.kevinlu98.cn/2023/02/03/yong-hu-yu-zu.html">
+<meta property="og:site_name" content="冷文聊编辑">
+<meta property="og:description" content="前言经过前面几节课的学习，我们应该是慢慢的可以脱离Linux的图形窗口了，这节课带大家认识下Linux中的用户与权限，这节课学完后面我们大部分情况下甚至都不用在虚拟机上去操作我们的Linux了 用户与组与权限用户首先我要了解到Linux 是多用户多任务的分时操作系统，看到这句话是不是懵了，什么是多用户？什么是多任务？什么是分时？ 其时上面那句话这样说大家就明白了，Linux 系统支持多个用户在同一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/3d71f10366b045baa4830e43d0fa5941.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/5eb21c5983f64b8ca25664b1ea163a83.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/f582479fdc3144039fea9c1a9ab41fb3.jpg">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/10c334ff9ac34e679f933ec835bc7f92.png">
+<meta property="article:published_time" content="2023-02-03T03:03:00.000Z">
+<meta property="article:modified_time" content="2023-02-08T12:48:01.641Z">
+<meta property="article:author" content="Mr丶冷文">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="用户">
+<meta property="article:tag" content="权限">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/3d71f10366b045baa4830e43d0fa5941.png">
+  <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://study.kevinlu98.cn/2023/02/03/yong-hu-yu-zu.html">
+  
+    <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/kevinlu98" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Mr丶冷文</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Golang Engineer &amp; Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanxi, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-feedback">
+          <a href="/feedback">
+            
+            <i class="icon icon-qzone"></i>
+            
+            <span class="menu-title">留言</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>冷文聊编辑【study.kevinlu98.cn】，主要分享B站教程中用到的课件及资料，主站为：<a target="_blank" rel="noopener" href="https://kevinlu98.cn">kevinlu98.cn</a>，欢迎大家访问</p><p>我也买了<a target="_blank" rel="noopener" href="https://www.itjc8.com/">https://www.itjc8.com/</a>这个网站的会员，大家如果在这个网站有想下载的东西请联系我，我发下载地址给大家<br> 当然如果你想请我喝杯咖啡，请扫下方二维码<br></p><div class="notice-donate"><img src="/images/donate/alipayimg.png"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a><span class="category-list-count">25</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/awk/" style="font-size: 13px;">awk</a> <a href="/tags/centos/" style="font-size: 13.2px;">centos</a> <a href="/tags/grep/" style="font-size: 13px;">grep</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/linux/" style="font-size: 13.6px;">linux</a> <a href="/tags/sed/" style="font-size: 13px;">sed</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/vim/" style="font-size: 13px;">vim</a> <a href="/tags/vmware/" style="font-size: 13px;">vmware</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;">个人博客</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/" style="font-size: 13.8px;">博客系统</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/" style="font-size: 13px;">基础命令</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 13.4px;">异常处理</a> <a href="/tags/%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/" style="font-size: 13px;">文本处理</a> <a href="/tags/%E6%9D%83%E9%99%90/" style="font-size: 13px;">权限</a> <a href="/tags/%E7%94%A8%E6%88%B7/" style="font-size: 13px;">用户</a> <a href="/tags/%E7%AE%A1%E9%81%93/" style="font-size: 13px;">管道</a> <a href="/tags/%E9%87%8D%E5%AE%9A%E5%90%91/" style="font-size: 13px;">重定向</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-02-03T03:03:00.000Z" itemprop="datePublished">2023-02-03</time> <a href="/2023/02/03/yong-hu-yu-zu.html" class="title">(六)Linux用户与权限</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-02-03T03:03:00.000Z" itemprop="datePublished">2023-02-03</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-02-01T03:03:00.000Z" itemprop="datePublished">2023-02-01</time> <a href="/2023/02/01/wen-ben-chu-li.html" class="title">(五)Linux文本处理</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-02-01T03:03:00.000Z" itemprop="datePublished">2023-02-01</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-16T03:03:00.000Z" itemprop="datePublished">2023-01-16</time> <a href="/2023/01/16/wen-ben-bian-ji-qi.html" class="title">(四)vim文本编辑器</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-16T03:03:00.000Z" itemprop="datePublished">2023-01-16</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-15T02:39:00.000Z" itemprop="datePublished">2023-01-15</time> <a href="/2023/01/15/zhong-ding-xiang-yu-guan-dao.html" class="title">(三)重定向与管道</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-15T02:39:00.000Z" itemprop="datePublished">2023-01-15</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-01-14T18:51:00.000Z" itemprop="datePublished">2023-01-15</time> <a href="/2023/01/15/ren-shi-wen-jian-xi-tong-ji-xiang-guan-ming-ling.html" class="title">(二)认识Linux文件系统及相关命令</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-01-14T18:51:00.000Z" itemprop="datePublished">2023-01-15</time>
+              </p> -->
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E4%B8%8E%E7%BB%84%E4%B8%8E%E6%9D%83%E9%99%90"><span class="toc-number">2.</span> <span class="toc-text">用户与组与权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7"><span class="toc-number">2.1.</span> <span class="toc-text">用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90"><span class="toc-number">2.2.</span> <span class="toc-text">权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%BB%84"><span class="toc-number">2.3.</span> <span class="toc-text">用户组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">Linux的用户管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">用户配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#su%E5%91%BD%E4%BB%A4"><span class="toc-number">3.2.</span> <span class="toc-text">su命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-number">3.3.</span> <span class="toc-text">添加用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7"><span class="toc-number">3.4.</span> <span class="toc-text">删除用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7"><span class="toc-number">3.5.</span> <span class="toc-text">修改用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="toc-number">3.6.</span> <span class="toc-text">修改密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="toc-number">3.7.</span> <span class="toc-text">远程登录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E6%8F%90"><span class="toc-number">3.7.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">3.7.2.</span> <span class="toc-text">客户端</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%BB%84%E7%AE%A1%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">Linux组管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E7%BB%84"><span class="toc-number">4.1.</span> <span class="toc-text">添加用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E7%BB%84"><span class="toc-number">4.2.</span> <span class="toc-text">删除用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7%E7%BB%84"><span class="toc-number">4.3.</span> <span class="toc-text">修改用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7%E7%BB%84"><span class="toc-number">4.4.</span> <span class="toc-text">切换用户组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">权限相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#chmod"><span class="toc-number">5.1.</span> <span class="toc-text">chmod</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chown"><span class="toc-number">5.2.</span> <span class="toc-text">chown</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sudo"><span class="toc-number">5.3.</span> <span class="toc-text">sudo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E7%BB%83%E4%B9%A0"><span class="toc-number">6.</span> <span class="toc-text">综合练习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">小结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-linux/6.Linux用户与组" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (六)Linux用户与权限
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/02/03/yong-hu-yu-zu.html" class="article-date">
+	  <time datetime="2023-02-03T03:03:00.000Z" itemprop="datePublished">2023-02-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="article-tag-link-link" href="/tags/%E6%9D%83%E9%99%90/" rel="tag">权限</a>, <a class="article-tag-link-link" href="/tags/%E7%94%A8%E6%88%B7/" rel="tag">用户</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/02/03/yong-hu-yu-zu.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 15(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>经过前面几节课的学习，我们应该是慢慢的可以脱离<code>Linux</code>的图形窗口了，这节课带大家认识下<code>Linux</code>中的用户与权限，这节课学完后面我们大部分情况下甚至都不用在虚拟机上去操作我们的<code>Linux</code>了</p>
+<h2 id="用户与组与权限"><a href="#用户与组与权限" class="headerlink" title="用户与组与权限"></a>用户与组与权限</h2><h3 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h3><p>首先我要了解到Linux 是多用户多任务的分时操作系统，看到这句话是不是懵了，什么是多用户？什么是多任务？什么是分时？</p>
+<p>其时上面那句话这样说大家就明白了，Linux 系统支持多个用户在同一时间内登陆，不同用户可以执行不同的任务，并且互不影响</p>
+<p>不同用户具有不同的权限，毎个用户在权限允许的范围内完成不同的任务，Linux 正是通过这种权限的划分与管理，实现了多用户多任务的运行机制</p>
+<img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/3d71f10366b045baa4830e43d0fa5941.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/3d71f10366b045baa4830e43d0fa5941.png" style="zoom:50%;" />
+
+<p>所以说任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统</p>
+<p>用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护</p>
+<p>每个用户都有唯一的用户名和密码。在登录系统时，只有正确输入用户名和密码，才能进入系统和自己的主目录</p>
+<h3 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h3><p>在Linux中，最常见的文件权限有 3 种：可读(r)、可写(w)、可执行(x)，在 Linux 系统中，每个文件都明确规定了不同身份用户的访问权限，通过 <code>ls -l</code> 命令即可看到，我们在用户家目录执行<code>ls -al</code>可以看到如下输出</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/5eb21c5983f64b8ca25664b1ea163a83.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230201/5eb21c5983f64b8ca25664b1ea163a83.png"></p>
+<ul>
+<li><p>权限是显示数据的第一列，第一列由10个字符组成</p>
+<ul>
+<li><p>第1位：文件类型，-表示文件，d表示目录</p>
+</li>
+<li><p>第2-4位：文件所有者的权限</p>
+</li>
+<li><p>第5-7位：文件所有者所属组成员的权限</p>
+</li>
+<li><p>第8-10位：所有者所属组之外的用户的权限</p>
+</li>
+</ul>
+</li>
+<li><p>第三列为文件所属用户</p>
+</li>
+<li><p>第四列为文件所属用户组</p>
+</li>
+</ul>
+<h3 id="用户组"><a href="#用户组" class="headerlink" title="用户组"></a>用户组</h3><p>用户组是具有相同特征用户的逻辑集合。简单的理解，有时我们需要让多个用户具有相同的权限，比如查看、修改某一个文件的权限，一种方法是分别对多个用户进行文件访问授权，如果有 10 个用户的话，就需要授权 10 次，那如果有 100、1000 个用户呢？</p>
+<p>显然，这种方法不太合理。最好的方式是建立一个组，让这个组具有查看、修改此文件的权限，然后将所有需要访问此文件的用户放入这个组中。那么，所有用户就具有了和组一样的权限，这就是用户组</p>
+<h2 id="Linux的用户管理"><a href="#Linux的用户管理" class="headerlink" title="Linux的用户管理"></a>Linux的用户管理</h2><p>用户管理工作主要就是对用户的增加修改和删除操作</p>
+<h3 id="用户配置文件"><a href="#用户配置文件" class="headerlink" title="用户配置文件"></a>用户配置文件</h3><p><code>Linux</code> 系统中的 <code>/etc/passwd</code> 文件，是系统用户配置文件，存储了系统中所有用户的基本信息，并且所有用户都可以对此文件执行读操作。</p>
+<p>我们使用<code>cat</code>来打开一下这个文件看看其中的内容 </p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，&#x2F;etc&#x2F;passwd 文件中的内容非常规律，但这个文件具体的意义是什么呢？</p>
+<p>文件中每行为一个用户信息，对于每行我们以<code>:</code>为分隔符从左到右依次如下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户名：密码：UID（用户ID）：GID（组ID）：描述性信息：主目录：默认Shell</span><br></pre></td></tr></table></figure>
+
+<p>为了方便大家的查看，大家可以使用如下命令在桌面上创建<code>print.awk</code>文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> &lt;&lt;EOF&gt;print.awk</span><br><span class="line"><span class="keyword">BEGIN</span> &#123;</span><br><span class="line">        printf(<span class="string">&quot;-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n&quot;</span>)</span><br><span class="line">        printf(<span class="string">&quot;| %-20s | %-4s | %-6s | %-6s | %-65s | %-30s | %-20s |\n&quot;</span>,<span class="string">&quot;username&quot;</span>,<span class="string">&quot;pass&quot;</span>,<span class="string">&quot;UID&quot;</span>,<span class="string">&quot;GID&quot;</span>,<span class="string">&quot;description&quot;</span>,<span class="string">&quot;home&quot;</span>,<span class="string">&quot;shell&quot;</span>)</span><br><span class="line">        printf(<span class="string">&quot;-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n&quot;</span>)</span><br><span class="line">        printf(<span class="string">&quot;-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">        printf(<span class="string">&quot;| %-20s | %-4s | %-6s | %-6s | %-65s | %-30s | %-20s |\n&quot;</span>,\<span class="variable">$1</span>,\<span class="variable">$2</span>,\<span class="variable">$3</span>,\<span class="variable">$4</span>,\<span class="variable">$5</span>,\<span class="variable">$6</span>,\<span class="variable">$7</span>)</span><br><span class="line">        printf(<span class="string">&quot;-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<p>然后我们再使用之前学过的<code>awk</code>命令对其输出</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="operator">-F</span> <span class="string">&#x27;:&#x27;</span> <span class="operator">-f</span> print.awk /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>我们来解释一下每一列的具体意义</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户名</td>
+<td>就是一串代表用户身份的字符串</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>“x” 表示此用户设有密码，但不是真正的密码，真正的密码保存在 &#x2F;etc&#x2F;shadow 文件中，但<code>/etc/shadow</code>这个文件中的密码是加密的</td>
+</tr>
+<tr>
+<td>UID</td>
+<td>每个用户都有一个 UID，Linux 系统通过 UID 来识别不同的用户，0为超级管理员</td>
+</tr>
+<tr>
+<td>GID</td>
+<td>用户初始组的组 ID 号</td>
+</tr>
+<tr>
+<td>描述性信息</td>
+<td>用来解释这个用户的意义</td>
+</tr>
+<tr>
+<td>主目录</td>
+<td>用户登录后有操作权限的访问目录，通常也被称为用户的家目录</td>
+</tr>
+<tr>
+<td>默认shell</td>
+<td>Linux 的命令解释器，其中<code>/sbin/nologin</code>表示不能登录shell</td>
+</tr>
+</tbody></table>
+<h3 id="su命令"><a href="#su命令" class="headerlink" title="su命令"></a>su命令</h3><p><code>su</code>命令用于在<code>linux</code>中切换用户身份，其用法如下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su [<span class="type">username</span>] <span class="comment"># 这里的username可以省略，省略则默认为root</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p>我们可以使用命令<code>useradd</code>来添加用户，<code>useradd</code>命令的使用如下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd [<span class="type">options</span>] username</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-d</td>
+<td>指定用户主目录，如果此目录不存在，则同时使用<code>-m</code>自动创建主目录(父目录必须存在)</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>指定用户所属的用户组</td>
+</tr>
+<tr>
+<td>-G</td>
+<td>指定用户所属的附加组</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>指定用户的登录Shell</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>指定一段注释性描述</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>uid，指定uid，如果同时有<code>-o</code>选项，则可以重复使用其他用户的标识号</td>
+</tr>
+</tbody></table>
+<p>一般情况下我们什么参数都不加则会创建一个用户，用户名为<code>username</code>，用户的主目录为<code>/home/username</code>，用户所属组为<code>username</code>，无附加组，用户登录的shell为<code>/bin/bash</code></p>
+<p>其实添加用户就是在<code>/etc/passwd</code>文件中为新用户增加一条记录，同时更新其他系统文件如<code>/etc/shadow</code>, <code>/etc/group</code>等</p>
+<p><strong>练习：</strong></p>
+<ul>
+<li>创建一个名为<code>tom</code>的用户，用户组为<code>tom</code>，家目录为<code>/home/tom</code>(<strong>提示：组信息保存在<code>/etc/group</code></strong>)</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd tom</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建一个名为<code>worker</code>的用户，用户组为<code>worker</code>，家目录为<code>/data/worker</code>，描述信息为<code>工作用户</code>且不能登陆shell</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /<span class="keyword">data</span> &amp;&amp; useradd worker <span class="literal">-d</span> /<span class="keyword">data</span>/worker <span class="literal">-c</span> 工作用户 <span class="literal">-s</span> /sbin/nologin <span class="literal">-m</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><p>我们可以使用<code>userdel</code>命令来删除某一用户，<code>userdel</code>命令使用如下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userdel [-<span class="type">r</span>] username <span class="comment"># -r作用是把用户的主目录一起删除</span></span><br></pre></td></tr></table></figure>
+
+<p><code>userdel</code>删除用户在系统文件中（主要是<code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>等）的记录，，如果添加了<code>-r</code>选项则会同时删除用户的主目录</p>
+<p><strong>练习：</strong></p>
+<ul>
+<li>删除<code>tom</code>用户及其主目录</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userdel <span class="literal">-r</span> tom</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除<code>worker</code>用户不删除其主目录</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userdel worker</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改用户"><a href="#修改用户" class="headerlink" title="修改用户"></a>修改用户</h3><p>我们可以使用<code>usermod</code>命令来修改已存在用户的相关信息如主目录、用户组等</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod [<span class="type">options</span>] username <span class="comment"># 这里的options同useradd中的options，就不做过多解释</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>练习：</strong></p>
+<p>修改<code>worker</code>用户的家目录为<code>/home/worker</code>且让其可登录</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod <span class="literal">-d</span> /home/worker <span class="literal">-s</span> /bin/bash <span class="literal">-m</span> worker</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><p>用户管理的一项重要内容是密码管理，用户刚创建时没有密码的</p>
+<p>指定和修改用户密码的命令是<code>passwd</code>。超级用户可以为自己和其他用户指定密码，普通用户只能用它修改自己的密码</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd [<span class="type">options</span>] [<span class="type">username</span>] <span class="comment"># username不填默认为当前用户</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-l</td>
+<td>锁定密码，即禁用账号</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>解锁</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>使账号无密码</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>强迫用户下次登录时修改口令</td>
+</tr>
+<tr>
+<td>–stdin</td>
+<td>仅超级用户可用，对密码不做任何校验</td>
+</tr>
+</tbody></table>
+<p>一般情况下，普通用户使用<code>passwd</code>时的过程如下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">passwd </span><br><span class="line">Old password:****** </span><br><span class="line">New password:******* </span><br><span class="line">Re<span class="literal">-enter</span> new password:*******</span><br></pre></td></tr></table></figure>
+
+<p><code>passwd</code>命令会先询问原密码，验证后再要求用户输入两遍新密码，如果两次输入的密码一致，则将这个密码指定给用户；而超级用户为用户指定密码时，就不需要知道原密码</p>
+<p>为了安全起见，密码的校验规则为8及以上位长，包含有大写、小写字母和数字，并且应该与姓名、生日等不相同</p>
+<p>如果想取消这个限制可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/tryc/p/11712156.html">CentOS7取消密码难度校验</a></p>
+<h3 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h3><p>Linux 一般作为服务器使用，而服务器一般放在机房，你不可能在机房操作你的 Linux 服务器，这时我们就需要远程登录到Linux服务器来管理维护系统</p>
+<p>Linux 系统中是通过 ssh 服务实现的远程登录功能，默认 ssh 服务端口号为 22</p>
+<h4 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h4><p>我们首先需要知道Linux主机的ip，其次我们要确保可以从我们自己的机器能通过网络连接到Linux主机</p>
+<p>使用<code>ip addr show</code>或<code>ifconfig</code>可以查看Linux系统的ip地址</p>
+<p>在自己的机器可以使用<code>ping ip</code>来验证</p>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><ul>
+<li>我们可以使用ssh客户端，如<code>MacOS</code>，大部分主流<code>Linux</code>及<code>Windows 10</code>以上的操作系统都默认有装<code>ssh</code>客户端，我们只需要通过在终端输入<code>ssh username@ip:port</code>就可以远程登录了，如果Linux主机的ssh端口为22则可省略</li>
+<li>通过第三方程序，由它们帮我们完成<code>ssh</code>登录<ul>
+<li>Xshell： <a target="_blank" rel="noopener" href="https://www.xshell.com/zh/xshell/">官网直达</a></li>
+<li>Finalshell：<a target="_blank" rel="noopener" href="http://www.hostbuf.com/">官网直达</a></li>
+<li>Termius：<a target="_blank" rel="noopener" href="https://www.termius.com/">官网直达</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="Linux组管理"><a href="#Linux组管理" class="headerlink" title="Linux组管理"></a>Linux组管理</h2><p>每个用户都有一个用户组，系统可以对一个用户组中的所有用户进行集中管理，用户组的管理涉及用户组的添加、删除和修改。组的增加、删除和修改实际上就是对<code>/etc/group</code>文件的更新</p>
+<h3 id="添加用户组"><a href="#添加用户组" class="headerlink" title="添加用户组"></a>添加用户组</h3><p>增加一个新的用户组使用groupadd命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupadd [-<span class="type">options</span>] roupname</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-g</td>
+<td>指定GID</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>表示可以与其它用户组使用相同的GID</td>
+</tr>
+</tbody></table>
+<h3 id="删除用户组"><a href="#删除用户组" class="headerlink" title="删除用户组"></a>删除用户组</h3><p>如果要删除一个已有的用户组，使用groupdel命令，其格式如下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupdel groupname</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改用户组"><a href="#修改用户组" class="headerlink" title="修改用户组"></a>修改用户组</h3><p>修改用户组的属性使用groupmod命令。其语法如下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupmod [-<span class="type">options</span>] groupname</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-g</td>
+<td>新GID</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>表示可以与其它用户组使用相同的GID</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>新名称</td>
+</tr>
+</tbody></table>
+<h3 id="切换用户组"><a href="#切换用户组" class="headerlink" title="切换用户组"></a>切换用户组</h3><p>如果一个用户同时属于多个用户组，那么用户可以使用命令newgrp在用户组之间切换，以便具有其他用户组的权限，</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newgrp groupname</span><br></pre></td></tr></table></figure>
+
+<h2 id="权限相关命令"><a href="#权限相关命令" class="headerlink" title="权限相关命令"></a>权限相关命令</h2><h3 id="chmod"><a href="#chmod" class="headerlink" title="chmod"></a>chmod</h3><p><code>chmod</code>(全称：change mode)命令是控制用户对文件的权限的命令</p>
+<p><code>Linux</code>的文件调用权限分为三级 : 文件所有者（Owner）、用户组（Group）、其它用户（Other Users）。</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/f582479fdc3144039fea9c1a9ab41fb3.jpg" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/f582479fdc3144039fea9c1a9ab41fb3.jpg"></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod [<span class="type">options</span>]  mode filename...</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-v</td>
+<td>显示权限变更的详细资料</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>若该文件权限无法被更改也不要显示错误讯息</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>对目前目录下的所有文件与子目录进行相同的权限变更(即以递归的方式逐个变更)</td>
+</tr>
+</tbody></table>
+<p>这里的mode可以使用权限字符串，也可以使用8进制表示</p>
+<p><strong>权限字符串</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">who</span>][<span class="type">operator</span>][<span class="type">permission</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>who：给谁加权限，u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是</li>
+<li>operator：设置权限，+ 表示增加权限、- 表示取消权限、&#x3D; 表示唯一设定权限</li>
+<li>permission：权限列表，r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行</li>
+</ul>
+<p><strong>8进制模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>权限</th>
+<th>rwx</th>
+<th>二进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>读 + 写 + 执行</td>
+<td>rwx</td>
+<td>111</td>
+</tr>
+<tr>
+<td>6</td>
+<td>读 + 写</td>
+<td>rw-</td>
+<td>110</td>
+</tr>
+<tr>
+<td>5</td>
+<td>读 + 执行</td>
+<td>r-x</td>
+<td>101</td>
+</tr>
+<tr>
+<td>4</td>
+<td>只读</td>
+<td>r–</td>
+<td>100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写 + 执行</td>
+<td>-wx</td>
+<td>011</td>
+</tr>
+<tr>
+<td>2</td>
+<td>只写</td>
+<td>-w-</td>
+<td>010</td>
+</tr>
+<tr>
+<td>1</td>
+<td>只执行</td>
+<td>–x</td>
+<td>001</td>
+</tr>
+<tr>
+<td>0</td>
+<td>无</td>
+<td>—</td>
+<td>000</td>
+</tr>
+</tbody></table>
+<p>这样mod可以用3个数字直接表示，例如：765 将这样解释</p>
+<ul>
+<li>所有者的权限用数字表达：属主的那三个权限位的数字加起来的总和。如 rwx ，也就是 4+2+1 ，应该是 7</li>
+<li>用户组的权限用数字表达：属组的那个权限位数字的相加的总和。如 rw- ，也就是 4+2+0 ，应该是 6</li>
+<li>其它用户的权限数字表达：其它用户权限位的数字相加的总和。如 r-x ，也就是 4+0+1 ，应该是 5</li>
+</ul>
+<p><strong>练习：</strong></p>
+<p>在桌面创建<code>start.sh</code>文件，给用户读写执行权限，给用户所属组读，给其它成员无权限</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch start.sh</span><br><span class="line">chmod <span class="number">740</span> start.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h3><p><code>chown</code>（全称：change owner）命令用于设置文件所有者和文件关联组的命令，需要超级用户才能执行</p>
+<p><code>Linux</code>是多人多工操作系统，所有的文件皆有拥有者,利用 chown 将指定文件的拥有者改为指定的用户或组</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown [<span class="type">options</span>] user[:<span class="type">group</span>] filename..</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-f</td>
+<td>忽略错误信息</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细的处理信息</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>处理指定目录以及其子目录下的所有文件</td>
+</tr>
+</tbody></table>
+<p><strong>练习：</strong></p>
+<ul>
+<li>创建<code>/data/work</code>目录，在其下创建<code>1.txt</code>，<code>2.txt</code>文件，更改<code>/data/work</code>目录及其下的文件所属的用户为<code>worker</code>，用户组为<code>work</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R worker:work /data/work/</span><br></pre></td></tr></table></figure>
+
+<h3 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h3><p>在命令前面加<code>sudo</code>可以以非超级用户身份执行超级用户有权执行的命令，但前提是需要授权</p>
+<p>关于给普通用户授权可以编辑<code>/etc/sudoers</code>文件，在最后一页可以看到如下内容：</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/10c334ff9ac34e679f933ec835bc7f92.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230203/10c334ff9ac34e679f933ec835bc7f92.png"></p>
+<p>可以看到这行</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%wheel <span class="attr">ALL</span>=(ALL)	ALl</span><br></pre></td></tr></table></figure>
+
+<p>我们复制，然后将<code>%wheel</code>改为目标用户就可以了，后面的ALL给的权限，我们这里就简单些给所有权限</p>
+<p>这个时候用普通用户创建<code>/testdir</code>目录会报无权限，我们可以加上<code>sudo</code>再测一下</p>
+<h2 id="综合练习"><a href="#综合练习" class="headerlink" title="综合练习"></a>综合练习</h2><ul>
+<li>创建用户组<code>developer</code>，创建用户<code>zhangsan</code>，<code>lisi</code>，<code>wangwu</code>并指定他们的家目录为<code>/developer/&#123;name&#125;</code>，所属组为<code>developer</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 切换root用户，当然大家也可以用有root权限的用户在下面的命令前加sudo</span></span><br><span class="line">su</span><br><span class="line"><span class="comment"># 创建/developer目录</span></span><br><span class="line">mkdir /developer</span><br><span class="line"><span class="comment"># 创建用户组</span></span><br><span class="line">groupadd developer</span><br><span class="line"><span class="comment"># 添加用户</span></span><br><span class="line">useradd <span class="literal">-d</span> /developer/zhangsan <span class="literal">-g</span> developer <span class="literal">-m</span> zhangsan</span><br><span class="line">useradd <span class="literal">-d</span> /developer/lisi <span class="literal">-g</span> developer <span class="literal">-m</span> lisi</span><br><span class="line">useradd <span class="literal">-d</span> /developer/wangwu <span class="literal">-g</span> developer <span class="literal">-m</span> wangwu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改<code>zhangsan</code>，<code>lisi</code>，<code>wangwu</code>的密码为1234(可以把一组命令放到文件中，然后给文件加上执行权限就可以通过执行这个文件的方式执行其中的命令)</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /developer &amp;&amp; <span class="built_in">ls</span> | awk <span class="string">&#x27;&#123;printf &quot;echo 1234 | passwd %s --stdin\n&quot;,$1&#125;&#x27;</span> &gt; pass.sh &amp;&amp; chmod +x pass.sh &amp;&amp; /bin/sh pass.sh &amp;&amp; <span class="built_in">rm</span> <span class="literal">-fr</span> pass.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建<code>/developer/common</code>的目录并修改所属为<code>zhangsan</code>，所属组为<code>developer</code>，并给其所属用户及所属组加上读写执行权限，其它用户无权限</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /developer</span><br><span class="line">mkdir common</span><br><span class="line">chown <span class="literal">-R</span> zhangsan:developer common</span><br><span class="line">chmod <span class="literal">-R</span> <span class="number">770</span> common/</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>切换用户身份为<code>zhangsan</code>在<code>/developer/common</code>目录下创建<code>hello.txt</code>并写入<code>hello,i am zhangsan</code>，并为组加上读写权限</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">su zhangsan</span><br><span class="line"><span class="built_in">cd</span> /developer/common</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;hello,i am zhangsan&#x27;</span> &gt; hello.txt</span><br><span class="line">chmod <span class="number">664</span> hello.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>切换用户身份为<code>lisi</code>和<code>wangwu</code>分别在<code>/developer/common/hello.txt</code>追加<code>hello,i am &#123;name&#125;</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su lisi/wangwu</span><br><span class="line"><span class="built_in">cd</span> /developer/common</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;hello,i am lisi/wangwu&#x27;</span> &gt;&gt; hello.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建用户<code>zhaoliu</code>，用户组为<code>zhaoliu</code>，家目录为<code>/home/zhaoliu</code>，所属组为<code>zhaoliu</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd zhaoliu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>尝试执行上在<code>/developer/common/hello.txt</code>追回<code>hello,i am zhaoliu</code></li>
+<li>修改<code>zhaoliu</code>的附加组为<code>developer</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod <span class="literal">-G</span> developer zhaoliu</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>再次测试</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这节课给大家简单的讲了下<code>Linux</code>中的用户及权限，也教大家远程登录，后续的课程中我们就很少会直接在<code>Linux</code>主机上操作了，都会使用远程登录的方式 </p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://study.kevinlu98.cn/2023/02/03/yong-hu-yu-zu.html" title="(六)Linux用户与权限" target="_blank" rel="external">https://study.kevinlu98.cn/2023/02/03/yong-hu-yu-zu.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/kevinlu98" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/kevinlu98" target="_blank"><span class="text-dark">Mr丶冷文</span><small class="ml-1x">Golang Engineer &amp; Web Developer</small></a></h3>
+        <div>喜欢网站设计、coding、爱折腾，一个不折不扣的小码农</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/02/01/wen-ben-chu-li.html" title="(五)Linux文本处理"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 Mr丶冷文 
+        
+        
+            <a target="_blank" href="https://beian.miit.gov.cn">陕ICP备19024566-1号</a>
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '8e99fb35d3204ac0e84f',
+    clientSecret: '50644825509a07e9c7ec2c206dae2d0cc6c78bb7',
+    repo: 'kevinlu98.github.io',
+    owner: 'kevinlu98',
+    admin: ['kevinlu98'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+
+   <style>
+      #waifu {
+         z-index: 999999 !important;
+         right: 16px !important;
+         left: auto;
+      }
+
+      #waifu-tips {
+         background-color: rgba(236, 217, 188, 1)
+      }
+   </style>
+   <script>
+      const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+      // 封装异步加载资源的方法
+      function loadExternalResource(url, type) {
+         return new Promise((resolve, reject) => {
+            let tag;
+
+            if (type === "css") {
+               tag = document.createElement("link");
+               tag.rel = "stylesheet";
+               tag.href = url;
+            }
+            else if (type === "js") {
+               tag = document.createElement("script");
+               tag.src = url;
+            }
+            if (tag) {
+               tag.onload = () => resolve(url);
+               tag.onerror = () => reject(url);
+               document.head.appendChild(tag);
+            }
+         });
+      }
+
+      // 加载 waifu.css live2d.min.js waifu-tips.js
+      if (screen.width >= 768) {
+         Promise.all([
+            loadExternalResource(live2d_path + "waifu.css", "css"),
+            loadExternalResource(live2d_path + "live2d.min.js", "js"),
+            loadExternalResource(live2d_path + "waifu-tips.js", "js")
+         ]).then(() => {
+            localStorage.setItem("modelId", 1);
+            localStorage.setItem("modelTexturesId", 21);
+            // 配置选项的具体用法见 README.md
+            initWidget({
+               waifuPath: "/tips.json",
+               apiPath: "https://live2d.fghrsh.net/api/",
+               // cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+               tools: ["hitokoto", "asteroids", "photo", "quit"]
+            });
+            $('#waifu-tool').append(`<span class="back-to-top" id="waifu-tool-top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/></svg></span>`)
+            $("#waifu-tool-top").on('click', function () {
+               $('body,html').stop().animate({
+                  scrollTop: 0
+               })
+            })
+         });
+      }
+   </script>
+   
+
+  
+    <style>
+        .highlight-wrap .copy-btn {
+            display: inline-block;
+            padding: 2px 6px;
+            position: absolute;
+            right: 4px;
+            top: 36px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .highlight-wrap .copy-tips {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            top: 36px;
+            right: 36px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background-color: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .highlight-wrap .copy-tips::before {
+            content: '◆';
+            color: #000;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+        }
+
+
+
+        .highlight-wrap {
+            position: relative;
+        }
+    </style>
+    <script>
+        addLoadEvent(() => {
+            let copyIcon = `<svg t="1673632770304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2720" width="20" height="20"><path d="M857.373005 65.290005 469.604424 65.290005c-34.211173 0-62.044078 27.832905-62.044078 62.043055l0 10.340509-63.076594 0c-25.993001 0-48.228421 16.346293-57.001225 39.293935L166.626995 176.967504c-34.21015 0-62.043055 27.832905-62.043055 62.043055l0 657.655358c0 34.21015 27.832905 62.043055 62.043055 62.043055l550.115086 0c34.21015 0 62.043055-27.832905 62.043055-62.043055l0-49.634444 78.587869 0c34.21015 0 62.043055-27.832905 62.043055-62.043055L919.41606 127.33306C919.41606 93.122911 891.583155 65.290005 857.373005 65.290005zM344.483752 179.035606l194.402595 0c10.833743 0 19.646456 8.813736 19.646456 19.646456 0 10.833743-8.813736 19.646456-19.646456 19.646456L344.483752 218.328517c-10.833743 0-19.646456-8.813736-19.646456-19.646456C324.836273 187.849342 333.650009 179.035606 344.483752 179.035606zM737.423099 896.665917c0 11.402701-9.278317 20.681018-20.681018 20.681018L166.626995 917.346935c-11.403724 0-20.681018-9.278317-20.681018-20.681018L145.945977 239.010559c0-11.402701 9.277294-20.681018 20.681018-20.681018l120.111588 0c8.197706 24.02723 30.977525 41.362037 57.744145 41.362037l194.402595 0c26.767644 0 49.54644-17.334807 57.744145-41.362037l120.111588 0c11.402701 0 20.681018 9.278317 20.681018 20.681018L737.422076 896.665917zM878.054023 784.988418c0 11.402701-9.278317 20.681018-20.681018 20.681018l-78.587869 0L778.785136 239.010559c0-34.21015-27.832905-62.043055-62.043055-62.043055L595.886549 176.967504c-8.771781-22.947641-31.007201-39.293935-57.001225-39.293935l-89.963964 0L448.921359 127.33306c0-11.403724 9.278317-20.681018 20.683065-20.681018l387.768581 0c11.402701 0 20.681018 9.277294 20.681018 20.681018L878.054023 784.988418z" fill="#272636" p-id="2721"></path><path d="M620.597347 334.252737 260.748652 334.252737c-11.422144 0-20.681018 9.259898-20.681018 20.681018s9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018S632.018467 334.252737 620.597347 334.252737z" fill="#272636" p-id="2722"></path><path d="M620.597347 454.201619 260.748652 454.201619c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C641.278365 463.46254 632.018467 454.201619 620.597347 454.201619z" fill="#272636" p-id="2723"></path><path d="M440.673511 574.151525 260.748652 574.151525c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l179.924859 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C461.35453 583.411423 452.093609 574.151525 440.673511 574.151525z" fill="#272636" p-id="2724"></path></svg>`
+            $('.highlight').each(function (i, e) {
+                var $wrap = $('<div>').addClass('highlight-wrap')
+                $(e).after($wrap)
+                $wrap.append(`<span class="copy-tips">复制</span>`)
+                let icon = `<i class="copy-btn">${copyIcon}</i>`
+                $wrap.append(icon).append(e)
+            })
+            $('.highlight-wrap .copy-btn').on('click', function () {
+                var code = $(this).parent().find(".code")[0].innerText
+                var ta = document.createElement('textarea')
+                document.body.appendChild(ta)
+                ta.style.position = 'absolute'
+                ta.style.top = '0px'
+                ta.style.left = '0px'
+                ta.value = code
+                ta.select()
+                ta.focus()
+                var result = document.execCommand('copy')
+                if(result){
+                    $(this).parent().children('.copy-tips').text('已复制')
+                }else{
+                    $(this).parent().children('.copy-tips').text('复制失败')
+                }
+               
+            }).mouseenter(function () {
+                $(this).parent().children('.copy-tips').stop().fadeIn()
+            }).mouseleave(function () {
+                $(this).parent().children('.copy-tips').stop().fadeOut().text('复制')
+            })
+        })
+    </script>
+    
+</body>
+</html>
