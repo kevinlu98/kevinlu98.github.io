@@ -17,27 +17,27 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>(四)vim文本编辑器 | 冷文聊编辑</title>
-  <meta name="description" content="前言在上节课讲文件描述符的时候应该是有提到过在Linux中一切皆文件，包括鼠标、键盘、网卡等这些硬件在内，所以我们在使用Linux操作系统中需要频繁的修改文件 ，这节课就带大家学习一下Linux中非常重要的文本编辑器vim Vim与ViVivi是所有Linux系统都会内建的文本编辑器，他不像我们在windows的记事本那样打开一个图形窗口来进行编辑，而是在shell窗口中对文本进行编辑，不过现在很">
+  <title>(七)Linux环境变量 | 冷文聊编辑</title>
+  <meta name="description" content="前言我们上节课学习了用户及权限的相关知识，同时也学习了远程登录，这节课再给大家讲讲环境变量，我们在手动安装很多程序时都会要设置环境变量，所以这节课就给大家介绍一下，当然也不仅仅是介绍环境变量，中间也会有一些新命令，最后会带大家手动安装一下java开发环境 alias命令Linux的alias命令用于设置指令的别名，紧对当前shell生效 12alias [nickname&#x3D;command_name">
 <meta property="og:type" content="article">
-<meta property="og:title" content="(四)vim文本编辑器">
-<meta property="og:url" content="https://study.kevinlu98.cn/2023/01/16/wen-ben-bian-ji-qi.html">
+<meta property="og:title" content="(七)Linux环境变量">
+<meta property="og:url" content="https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html">
 <meta property="og:site_name" content="冷文聊编辑">
-<meta property="og:description" content="前言在上节课讲文件描述符的时候应该是有提到过在Linux中一切皆文件，包括鼠标、键盘、网卡等这些硬件在内，所以我们在使用Linux操作系统中需要频繁的修改文件 ，这节课就带大家学习一下Linux中非常重要的文本编辑器vim Vim与ViVivi是所有Linux系统都会内建的文本编辑器，他不像我们在windows的记事本那样打开一个图形窗口来进行编辑，而是在shell窗口中对文本进行编辑，不过现在很">
+<meta property="og:description" content="前言我们上节课学习了用户及权限的相关知识，同时也学习了远程登录，这节课再给大家讲讲环境变量，我们在手动安装很多程序时都会要设置环境变量，所以这节课就给大家介绍一下，当然也不仅仅是介绍环境变量，中间也会有一些新命令，最后会带大家手动安装一下java开发环境 alias命令Linux的alias命令用于设置指令的别名，紧对当前shell生效 12alias [nickname&#x3D;command_name">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/0700f475b36a44cca49c04a712ea32d2.png">
-<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/af38f52c3f6249a08254987389e2e28f.png">
-<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230118/ec45de7352ad4bd09aae45189a8eca99.gif">
-<meta property="article:published_time" content="2023-01-16T03:03:00.000Z">
-<meta property="article:modified_time" content="2023-02-08T12:29:48.117Z">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230209/3a6c77ca562b4d0dbf56a7950757dcac.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230223/76274ab1ab274635b7de4e45dbce5153.png">
+<meta property="article:published_time" content="2023-02-26T03:03:00.000Z">
+<meta property="article:modified_time" content="2023-03-09T13:01:00.130Z">
 <meta property="article:author" content="Mr丶冷文">
 <meta property="article:tag" content="linux">
-<meta property="article:tag" content="vim">
+<meta property="article:tag" content="shell">
+<meta property="article:tag" content="环境变量">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/0700f475b36a44cca49c04a712ea32d2.png">
+<meta name="twitter:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230209/3a6c77ca562b4d0dbf56a7950757dcac.png">
   <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://study.kevinlu98.cn/2023/01/16/wen-ben-bian-ji-qi.html">
+  <link rel="canonical" href="https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html">
   
     <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
   
@@ -350,21 +350,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim%E4%B8%8EVi"><span class="toc-number">2.</span> <span class="toc-text">Vim与Vi</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vi"><span class="toc-number">2.1.</span> <span class="toc-text">Vi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim"><span class="toc-number">2.2.</span> <span class="toc-text">Vim</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">Vim的工作模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim%E7%9A%84%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">Vim的命令模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%89%E6%A0%87%E7%A7%BB%E5%8A%A8"><span class="toc-number">3.1.1.</span> <span class="toc-text">光标移动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2"><span class="toc-number">3.1.2.</span> <span class="toc-text">搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6-x2F-%E7%B2%98%E8%B4%B4-x2F-%E6%92%A4%E9%94%80-x2F-%E5%88%A0%E9%99%A4-x2F-%E5%85%B6%E5%AE%83"><span class="toc-number">3.1.3.</span> <span class="toc-text">复制&#x2F;粘贴&#x2F;撤销&#x2F;删除&#x2F;其它</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%9D%97"><span class="toc-number">3.1.4.</span> <span class="toc-text">可视块</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim%E7%9A%84%E7%BC%96%E8%BE%91%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">Vim的编辑模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim%E5%BA%95%E7%BA%BF%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.3.</span> <span class="toc-text">Vim底线命令模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.4.</span> <span class="toc-text">Vim设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim%E9%94%AE%E7%9B%98%E5%9B%BE"><span class="toc-number">3.5.</span> <span class="toc-text">Vim键盘图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim%E6%89%B9%E9%87%8F%E6%B3%A8%E9%87%8A"><span class="toc-number">4.</span> <span class="toc-text">Vim批量注释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E6%B3%A8%E9%87%8A"><span class="toc-number">4.1.</span> <span class="toc-text">指令行模式注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%86%E5%9D%97%E6%89%B9%E9%87%8F%E6%B3%A8%E9%87%8A"><span class="toc-number">4.2.</span> <span class="toc-text">可视块批量注释</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#alias%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">alias命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#which%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">which命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E9%93%BE%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">Linux链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-number">4.1.</span> <span class="toc-text">硬链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.2.</span> <span class="toc-text">软连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ln%E5%91%BD%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">ln命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tar%E5%91%BD%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">tar命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wget%E5%B7%A5%E5%85%B7"><span class="toc-number">6.</span> <span class="toc-text">wget工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">7.</span> <span class="toc-text">环境变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">7.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">7.2.</span> <span class="toc-text">常见环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">7.3.</span> <span class="toc-text">环境变量的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B0%B8%E4%B9%85%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AE%BE%E7%BD%AE"><span class="toc-number">7.4.</span> <span class="toc-text">永久环境变量设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#source%E5%91%BD%E4%BB%A4"><span class="toc-number">7.5.</span> <span class="toc-text">source命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PATH%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">7.6.</span> <span class="toc-text">PATH环境变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9Ajdk%E5%AE%89%E8%A3%85"><span class="toc-number">8.</span> <span class="toc-text">练习：jdk安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-linux/4.vim文本编辑器" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-linux/7.Linux环境变量" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      (四)vim文本编辑器
+      (七)Linux环境变量
     </h1>
   
 
@@ -372,8 +372,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2023/01/16/wen-ben-bian-ji-qi.html" class="article-date">
-	  <time datetime="2023-01-16T03:03:00.000Z" itemprop="datePublished">2023-01-16</time>
+	<a href="/2023/02/26/huan-jing-bian-liang.html" class="article-date">
+	  <time datetime="2023-02-26T03:03:00.000Z" itemprop="datePublished">2023-02-26</time>
 	</a>
 </span>
         
@@ -385,7 +385,7 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="article-tag-link-link" href="/tags/vim/" rel="tag">vim</a>
+	<a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="article-tag-link-link" href="/tags/shell/" rel="tag">shell</a>, <a class="article-tag-link-link" href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" rel="tag">环境变量</a>
   </span>
 
 
@@ -398,476 +398,308 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/01/16/wen-ben-bian-ji-qi.html#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/02/26/huan-jing-bian-liang.html#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.8k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上节课讲文件描述符的时候应该是有提到过在Linux中一切皆文件，包括鼠标、键盘、网卡等这些硬件在内，所以我们在使用Linux操作系统中需要频繁的修改文件 ，这节课就带大家学习一下Linux中非常重要的文本编辑器<code>vim</code></p>
-<h2 id="Vim与Vi"><a href="#Vim与Vi" class="headerlink" title="Vim与Vi"></a>Vim与Vi</h2><h3 id="Vi"><a href="#Vi" class="headerlink" title="Vi"></a>Vi</h3><p>vi是所有Linux系统都会内建的文本编辑器，他不像我们在windows的记事本那样打开一个图形窗口来进行编辑，而是在shell窗口中对文本进行编辑，不过现在很少有人会使用vi编辑器了，都是用它的替代器vim</p>
-<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><p>vim 是从 vi 发展出来的一个文本编辑器，兼容 vi 的所有指令，不仅能编辑文本，而且还有代码补全、编译及错误跳转等方便编程的功能特别丰富，现在基本一些 主流的Linux操作系统上都内置了vim，我们可以看看<a target="_blank" rel="noopener" href="https://www.vim.org/">vim官网</a>对其的描述</p>
-<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/0700f475b36a44cca49c04a712ea32d2.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/0700f475b36a44cca49c04a712ea32d2.png"></p>
-<h2 id="Vim的工作模式"><a href="#Vim的工作模式" class="headerlink" title="Vim的工作模式"></a>Vim的工作模式</h2><p>在使用vim编辑器时，共有3种工作模式，分别是底线命令模式、命令模式和编辑模式，这3种工作模式可以随意切换</p>
-<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/af38f52c3f6249a08254987389e2e28f.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230116/af38f52c3f6249a08254987389e2e28f.png"></p>
-<h3 id="Vim的命令模式"><a href="#Vim的命令模式" class="headerlink" title="Vim的命令模式"></a>Vim的命令模式</h3><p>在使用vim编辑文件时，默认所处的模式就是命令模式，可使用方向键(上、下、左、右)移动光标位置，也可以对其进行复制、粘贴、删除、替换、撤销等操作，接下来我们具体看看怎么使用命令模式</p>
-<h4 id="光标移动"><a href="#光标移动" class="headerlink" title="光标移动"></a>光标移动</h4><p><strong>这个表格中的字母是区分大小写的</strong></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们上节课学习了用户及权限的相关知识，同时也学习了远程登录，这节课再给大家讲讲环境变量，我们在手动安装很多程序时都会要设置环境变量，所以这节课就给大家介绍一下，当然也不仅仅是介绍环境变量，中间也会有一些新命令，最后会带大家手动安装一下java开发环境</p>
+<h2 id="alias命令"><a href="#alias命令" class="headerlink" title="alias命令"></a>alias命令</h2><p><code>Linux</code>的<code>alias</code>命令用于设置指令的别名，紧对当前shell生效</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias [<span class="type">nickname</span>=<span class="type">command_name</span>]</span><br><span class="line"><span class="comment"># 如果后面不设置别名，则打印当前所有别名列表</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>例如：</strong></p>
+<p>设置别名为<code>l</code>，功能为打印<code>/</code>下的所有文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias l=<span class="string">&#x27;ls -a /&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="which命令"><a href="#which命令" class="headerlink" title="which命令"></a>which命令</h2><p><code>which</code>命令，主要用于用于查看给定命令的绝对路径</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">which [<span class="type">options</span>] command_name</span><br></pre></td></tr></table></figure>
+
 <table>
 <thead>
 <tr>
-<th>输入</th>
+<th>选项</th>
 <th>含义</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>[n] + h 或 向左箭头键(←)</strong></td>
-<td><strong>光标向左移动n个字符，这里n为任意数字，可以省略，省略时默认为1</strong></td>
+<td>–all，-a</td>
+<td>打印出所有在 PATH 中匹配的可执行程序，而不仅仅是第一个匹配的可执行程序</td>
 </tr>
 <tr>
-<td><strong>[n] + j 或 向下箭头键(↓)</strong></td>
-<td><strong>光标向下移动n个字符，这里n为任意数字，可以省略，省略时默认为1</strong></td>
+<td>–read-alias, -i</td>
+<td>打印别名</td>
 </tr>
 <tr>
-<td><strong>[n] + k 或 向上箭头键(↑)</strong></td>
-<td><strong>光标向上移动n个字符，这里n为任意数字，可以省略，省略时默认为1</strong></td>
+<td>–skip-alias</td>
+<td>跳过别名</td>
 </tr>
 <tr>
-<td><strong>[n] + l(小写L) 或 向右箭头键(→)</strong></td>
-<td><strong>光标向右移动n个字符，这里n为任意数字，可以省略，省略时默认为1</strong></td>
+<td>–read-functions</td>
+<td>读取 Shell 函数的定义，并打印匹配的函数</td>
 </tr>
 <tr>
-<td>Ctrl+f</td>
-<td>屏幕向下移动一页</td>
-</tr>
-<tr>
-<td>Ctrl+b</td>
-<td>屏幕向上移动一页</td>
-</tr>
-<tr>
-<td>Ctrl+d</td>
-<td>屏幕向下移动半页</td>
-</tr>
-<tr>
-<td>Ctrl+u</td>
-<td>屏幕向上移动半页</td>
-</tr>
-<tr>
-<td>+</td>
-<td>光标移动到下一行的非空格字符</td>
-</tr>
-<tr>
-<td>-</td>
-<td>光标移动到上一行的非空格字符</td>
-</tr>
-<tr>
-<td>[n] + 空格键</td>
-<td>光标会向后移动 n 个字符，这里n为任意数字，可以省略，省略时默认为1，这里与右键是有区别的，当移动到这行最后时会自动换行</td>
-</tr>
-<tr>
-<td>0</td>
-<td>数字0，移动到行首</td>
-</tr>
-<tr>
-<td>$</td>
-<td>移动到行尾</td>
-</tr>
-<tr>
-<td>H</td>
-<td>光标移动到这个屏幕的最上方那一行的第一个字符(非文件第1行)</td>
-</tr>
-<tr>
-<td>M</td>
-<td>光标移动到这个屏幕的中央那一行的第一个字符</td>
-</tr>
-<tr>
-<td>L</td>
-<td>光标移动到这个屏幕的最下方那一行的第一个字符</td>
-</tr>
-<tr>
-<td><strong>G</strong></td>
-<td><strong>移动到这个文件的最后一行</strong></td>
-</tr>
-<tr>
-<td><strong>[n] + G</strong></td>
-<td><strong>移动到这个文件的第 n 行，这里n为任意数字</strong></td>
-</tr>
-<tr>
-<td><strong>gg</strong></td>
-<td><strong>移动到这个文件的第一行，相当于 1G</strong></td>
-</tr>
-<tr>
-<td><strong>[n] + 回车键</strong></td>
-<td><strong>光标向下移动 n 行，这里n为任意数字，可以省略，省略时默认为1，这里与下键是有区别的，下键不会回到行首</strong></td>
-</tr>
-<tr>
-<td><strong>[n] + w&#x2F;W</strong></td>
-<td><strong>光标移动至下n个单词的单词首，这里n为任意数字，可以省略，省略时默认为1</strong></td>
-</tr>
-<tr>
-<td>[n] + b&#x2F;B</td>
-<td>光标移动至前n个单词的单词首，这里n为任意数字，可以省略，省略时默认为1</td>
-</tr>
-<tr>
-<td>[n] + e&#x2F;E</td>
-<td>光标移动至后n个单词的单词尾，这里n为任意数字，可以省略，省略时默认为1</td>
+<td>–skip-functions</td>
+<td>跳过函数</td>
 </tr>
 </tbody></table>
-<h4 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h4><table>
-<thead>
-<tr>
-<th>输入</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>&#x2F; + [word]</strong></td>
-<td><strong>向光标之下寻找一个为 word 的字符串，这里的word为任意字符串，通常配合n和N使用</strong></td>
-</tr>
-<tr>
-<td>? + [word]</td>
-<td>向光标之下寻找一上为 word 的字符串，这里的word为任意字符串</td>
-</tr>
-<tr>
-<td><strong>n</strong></td>
-<td><strong>重复前一个搜寻的动作</strong></td>
-</tr>
-<tr>
-<td><strong>N</strong></td>
-<td><strong>反向重复前一个搜寻的动作</strong></td>
-</tr>
-</tbody></table>
-<h4 id="复制-x2F-粘贴-x2F-撤销-x2F-删除-x2F-其它"><a href="#复制-x2F-粘贴-x2F-撤销-x2F-删除-x2F-其它" class="headerlink" title="复制&#x2F;粘贴&#x2F;撤销&#x2F;删除&#x2F;其它"></a>复制&#x2F;粘贴&#x2F;撤销&#x2F;删除&#x2F;其它</h4><table>
-<thead>
-<tr>
-<th>输入</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>[n] + x</td>
-<td>在一行字当中向后删除n个字符，包含光标</td>
-</tr>
-<tr>
-<td>[n] + X</td>
-<td>在一行字当中向前删除n个字符</td>
-</tr>
-<tr>
-<td><strong>[n] + dd</strong></td>
-<td><strong>剪切光标所在的向下 n 行，包含光标</strong></td>
-</tr>
-<tr>
-<td>d1G</td>
-<td>剪切光标所在到第一行的所有数据，包含光标</td>
-</tr>
-<tr>
-<td>dG</td>
-<td>剪切光标所在到最后一行的所有数据，包含光标</td>
-</tr>
-<tr>
-<td>d$</td>
-<td>剪切游标所在处到行尾的所有字符，包含光标</td>
-</tr>
-<tr>
-<td>d0</td>
-<td>剪切游标所在处到行首的所有字符</td>
-</tr>
-<tr>
-<td>d + [n] +w</td>
-<td>在一行中向后删除n个单词，包含光标，这里n为任意数字，省略默认为1</td>
-</tr>
-<tr>
-<td><strong>[n] + yy</strong></td>
-<td><strong>向后复制n行，包含光标所在行，这里n为任意数字，省略默认这1</strong></td>
-</tr>
-<tr>
-<td>y1G</td>
-<td>复制光标所在到第一行的所有数据，包含光标</td>
-</tr>
-<tr>
-<td>yG</td>
-<td>复制光标所在到最后一行的所有数据，包含光标</td>
-</tr>
-<tr>
-<td>y$</td>
-<td>复制游标所在处到行尾的所有字符，包含光标</td>
-</tr>
-<tr>
-<td>Y0</td>
-<td>复制游标所在处到行首的所有字符</td>
-</tr>
-<tr>
-<td>Y + [n] +w</td>
-<td>在一行中向后复制n个单词，包含光标，这里n为任意数字，省略默认为1</td>
-</tr>
-<tr>
-<td><strong>p</strong></td>
-<td><strong>将已复制的数据在光标下一行贴上</strong></td>
-</tr>
-<tr>
-<td>P</td>
-<td>将已复制的数据在光标上一行贴上</td>
-</tr>
-<tr>
-<td><strong>J</strong></td>
-<td><strong>将光标所在行与下一行的数据结合成同一行</strong></td>
-</tr>
-<tr>
-<td><strong>u</strong></td>
-<td><strong>复原前一个动作(撤销)</strong></td>
-</tr>
-<tr>
-<td>&gt;&gt;</td>
-<td>选中行向右缩进</td>
-</tr>
-<tr>
-<td>&lt;&lt;</td>
-<td>选中行向左缩进</td>
-</tr>
-</tbody></table>
-<h4 id="可视块"><a href="#可视块" class="headerlink" title="可视块"></a>可视块</h4><p>上面只是在移动光标的位置，当我们想要选择一块内容时可以用可视块功能进行选择，方便我们对选中区域做批量操作</p>
+<h2 id="Linux链接"><a href="#Linux链接" class="headerlink" title="Linux链接"></a>Linux链接</h2><p>Linux 链接分两种:</p>
+<ul>
+<li>硬链接（Hard Link）</li>
+<li>符号链接（Symbolic Link）</li>
+</ul>
+<p>默认情况下，<code>ln</code> 命令产生硬链接</p>
+<h3 id="硬链接"><a href="#硬链接" class="headerlink" title="硬链接"></a>硬链接</h3><p>硬链接，全称叫作硬链接文件，英文名称是 hard link。这类文件比较特殊，这类文件（假设叫 A）会拥有自己的 inode 节点和名称，其 inode 会指向文件内容所在的数据块。与此同时，该文件内容所在的数据块的引用计数会加 1。当此数据块的引用计数大于等于 2 时，则表示有多个文件同时指向了这一数据块。一个文件修改，多个文件都会生效。当删除其中某个文件时，对另一个文件不会有影响，仅仅是数据块的引用计数减 1。当引用计数为 0 时，则系统才会清除此数据块，比如：A 是 B 的硬链接（A 和 B 都是文件名），则 A 的目录项中的 inode 节点号与 B 的目录项中的 inode 节点号相同，即一个 inode 节点对应两个不同的文件名，两个文件名指向同一个文件，A 和 B 对文件系统来说是完全平等的。删除其中任何一个都不会影响另外一个的访问</p>
+<h3 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h3><p>软链接，全称是软链接文件，英文叫作 symbolic link。这类文件其实非常类似于 Windows 里的快捷方式，这个软链接文件（假设叫 VA）的内容，其实是另外一个文件（假设叫 B）的路径和名称，当打开 A 文件时，实际上系统会根据其内容找到并打开 B 文件，比如：A是B的软链接，我们可以像操作B一样去操作A，但如果我们把B删除了，A仍然存在，但其成了一个无效的链接</p>
+<h3 id="ln命令"><a href="#ln命令" class="headerlink" title="ln命令"></a>ln命令</h3><p><code>ln</code>命令是linux系统中一个非常重要命令，英文全称是“link”，即链接的意思，它的功能是为某一个文件在另外一个位置建立一个同步的链接。 一种是hard link，又称为硬链接；另一种是symbolic link，又称为符号链接，<code>ln</code>的命令格式：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln [-<span class="type">s</span>] source target</span><br><span class="line"><span class="comment"># -s 建立软链接，不加则硬链接</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>练习：</strong></p>
+<ul>
+<li>创建<code>1.txt</code>，内容随便</li>
+<li>创建<code>1.txt</code>的硬链接<code>2.txt</code>且查看<code>2.txt</code>的内容</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln <span class="number">1</span>.txt <span class="number">2</span>.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>更改<code>2.txt</code>的内容，然后查看<code>1.txt</code></li>
+<li>更改<code>1.txt</code>的内容，然后查看<code>2.txt</code></li>
+<li>删除<code>1.txt</code>，查看<code>2.txt</code></li>
+<li>创建<code>2.txt</code>的软链接<code>3.txt</code>且查看<code>3.txt</code>的内容</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln <span class="literal">-s</span> <span class="number">2</span>.txt <span class="number">3</span>.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改<code>3.txt</code>内容，然后查看<code>2.txt</code></li>
+<li>修改<code>2.txt</code>内容，然后查看<code>3.txt</code></li>
+<li>删除<code>2.txt</code>，然后查看<code>3.txt</code></li>
+</ul>
+<h2 id="tar命令"><a href="#tar命令" class="headerlink" title="tar命令"></a>tar命令</h2><p>Linux <code>tar</code>（英文全拼：tape archive ）命令用于备份文件，tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar [<span class="type">options</span>] file...</span><br></pre></td></tr></table></figure>
+
 <table>
 <thead>
 <tr>
-<th>输入</th>
+<th>选项</th>
 <th>含义</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>v(小写)</td>
-<td>字符可视化，以字符为单位进行选择</td>
+<td>-A 或 –catenate</td>
+<td>新增文件到已存在的备份文件</td>
 </tr>
 <tr>
-<td>V(大写)</td>
-<td>行可视化，以行为单位进行选择</td>
+<td>-c 或 –create</td>
+<td>建立新的备份文件</td>
 </tr>
 <tr>
-<td><strong>Ctrl+v</strong></td>
-<td><strong>块可视化，以块为单位进行选择，类似于在vscode中用鼠标中键进行选择</strong></td>
+<td>-C&lt;目的目录&gt;或–directory&#x3D;&lt;目的目录&gt;</td>
+<td>切换到指定的目录</td>
+</tr>
+<tr>
+<td>-f&lt;备份文件&gt;或–file&#x3D;&lt;备份文件&gt;</td>
+<td>指定备份文件</td>
+</tr>
+<tr>
+<td>-t或–list</td>
+<td>列出备份文件的内容</td>
+</tr>
+<tr>
+<td>-v或–verbose</td>
+<td>显示指令执行过程</td>
+</tr>
+<tr>
+<td>-x或–extract或–get</td>
+<td>从备份文件中还原文件</td>
+</tr>
+<tr>
+<td>-z或–gzip或–ungzip</td>
+<td>通过gzip指令处理备份文件</td>
+</tr>
+<tr>
+<td>–delete</td>
+<td>从备份文件中删除指定的文件</td>
+</tr>
+<tr>
+<td>–help</td>
+<td>在线帮助</td>
 </tr>
 </tbody></table>
-<p>在使用可视块选中后可以使用如下输入进行批量编辑</p>
+<p><strong>注：</strong><code>tar</code>的参数远远不至这么多，大家可以看看<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-tar.html">菜鸟上tar命令</a>的参数列表，我上面列了一些大家最常用的，其实我们只需要知道如何用它压缩和解压缩就行了，至于其它的高级用法我们教程中用不到，而且在未来大家工作中也大概率用不到</p>
+<ul>
+<li>使用如下命令创建<code>1.txt</code>及<code>2.txt</code>文件并查看大小</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">ls</span> <span class="literal">-Rl</span> /etc &gt; <span class="number">1</span>.txt <span class="comment"># 这个文件大概有240k</span></span><br><span class="line">sudo <span class="built_in">ls</span> <span class="literal">-Rl</span> /usr &gt; <span class="number">2</span>.txt <span class="comment"># 这个文件大概有8.6M</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们可以使用<code>-f</code>参数指定压缩包的名称，使用<code>-v</code>参数可以显示执行过程，使用<code>-c</code>参数用于创建新的压缩包，执行命令创建压缩包并查看大小，不难看出，我们仅仅把<code>1.txt</code>和<code>2.txt</code>文件归档到一个文件中了，但并没有压缩的作用，一般我们使用<code>.tar</code>作为这种使用tar只归档但没有压缩的文件后缀</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar <span class="literal">-cvf</span> myfile.tar <span class="number">1</span>.txt <span class="number">2</span>.txt <span class="comment"># 生成的新文件大概有8.9M，其实就相当于1.txt+2.txt的大小，并没有做压缩</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在上述命令上加上<code>-z</code>选项指定通过<code>gzip</code>处理压缩文件，而<code>gzip</code>文件的后缀一般为<code>.gz</code>，而因为我们是先使用<code>tar</code>做归档，然后再使用<code>gzip</code>做压缩，所以我们通过情况下对这种压缩文件以<code>.tar.gz</code>作为后缀，我们再来看下大小</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar <span class="literal">-czvf</span> myfile.tar.gz <span class="number">1</span>.txt <span class="number">2</span>.txt <span class="comment"># 生成的新文件大概有1.2M，效果还是很明显的</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们只需要将上述归档或压缩参数中的<code>-c</code>换成<code>-x</code>就可以完成解压缩的操作了</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除1.txt 2.txt</span></span><br><span class="line"><span class="built_in">rm</span> <span class="literal">-fr</span> <span class="number">1</span>.txt <span class="number">2</span>.txt</span><br><span class="line">tar <span class="literal">-xzvf</span> myfile.tar.gz</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当然我们也可以用<code>-C</code>指定解压的目标目录</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar <span class="literal">-xzvf</span> myfile.tar.gz <span class="literal">-C</span> ~/Desktop <span class="comment">#解压到桌面</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="wget工具"><a href="#wget工具" class="headerlink" title="wget工具"></a>wget工具</h2><p><code>wget</code>是Linux系统下的一款工具，用于从远程服务器恢复备份到本地服务器，支持HTTP，HTTPS和FTP协议，简单来说就是下载</p>
+<p>如果你当时安装Linux系统时是跟随我的教程走的，那么你的机器上应该是有<code>wget</code>的，如果没有也没关系，网上搜索一下CentOS7安装<code>wget</code>，一行命令就能搞定</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">wget</span> [<span class="type">options</span>] url</span><br></pre></td></tr></table></figure>
+
 <table>
 <thead>
 <tr>
-<th>输入</th>
-<th>含义</th>
+<th>选项</th>
+<th>参数</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>d</td>
-<td>删除选中部分文本</td>
+<td>-r</td>
+<td>递归，wget首先下载URL指定的文件，如果该文件是一个HTML文档的话递归下载该文件所引用所有文件</td>
 </tr>
 <tr>
-<td>D</td>
-<td>删除选中行，与d不同的是即使某行没有完全被选中，删除时也会被删除</td>
+<td>-N</td>
+<td>该参数指定wget只下载更新的文件，也就是说，与本地目录中的对应文件的长度和最后修改日期一样的文件将不被下载</td>
 </tr>
 <tr>
-<td>y</td>
-<td>将选中部分复制到剪贴板</td>
+<td>-l</td>
+<td>设置递归级数，默认为5，<code>-l0</code>为无穷递归；<code>-l1</code>相当于不递归</td>
 </tr>
 <tr>
-<td>p(小写)</td>
-<td>将剪贴板中的内容粘贴到光标之后</td>
+<td>-t</td>
+<td>设置重试次数，<code>-t0</code>则重试次数设为无穷多</td>
 </tr>
 <tr>
-<td>P(大写)</td>
-<td>将剪贴板中的内容粘贴到光标之前。</td>
+<td>-v</td>
+<td>设置wget输出详细的工作信息</td>
 </tr>
 <tr>
-<td>u(小写)</td>
-<td>将选中部分中的大写字符全部改为小写字符。</td>
-</tr>
-<tr>
-<td>U(大写)</td>
-<td>将选中部分中的小写字符全部改为大写字符。</td>
-</tr>
-<tr>
-<td>&gt;</td>
-<td>将选中部分右移（缩进）一个 tab 键</td>
-</tr>
-<tr>
-<td>&lt;</td>
-<td>将选中部分左移一个 tab 键</td>
+<td>-q</td>
+<td>设置wget不输出任何信息</td>
 </tr>
 </tbody></table>
-<h3 id="Vim的编辑模式"><a href="#Vim的编辑模式" class="headerlink" title="Vim的编辑模式"></a>Vim的编辑模式</h3><p>在命令模式下输入如下可以进入编辑模式，进入输入模式后大家正常输入就可以了，大家在输入时可以按<code>Ctrl+n/p</code>  根据历史输入和系统库文件进行输入提示，也可以按<code>ESC</code>退回到命令模式</p>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>在看环境变量之前我们先看看变量，变量是计算机系统用于保存可变值的数据类型，我们可以直接通过变量名称来提取到对应的变量值；而环境变量是用来定义系统运行环境的一些参数，比如用户的家目录(HOME)、用户使用的shell(SHELL)、用户邮件位置(MAIL)等</p>
+<p>这里有个不成文的规定，大家一般会把环境变量的名称全部设置成大写</p>
+<p>我们可以使用<code>env</code>命令来查看系统中的所有环境变量，当然也可以使用<code>echo $变量名</code>打印出某个变量的值</p>
+<h3 id="常见环境变量"><a href="#常见环境变量" class="headerlink" title="常见环境变量"></a>常见环境变量</h3><p>Linux 系统能够正常运行并且为用户提供服务，需要数十个环境变量来协同工作，我们这里就简单了解一下几个常用 的环境变量</p>
 <table>
 <thead>
 <tr>
-<th>输入</th>
-<th>含义</th>
+<th>环境变量</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>i</strong></td>
-<td><strong>从光标处进入输入模式</strong></td>
+<td>HOME</td>
+<td>用户的主目录（也称家目录）</td>
 </tr>
 <tr>
-<td><strong>I(这是一个大写i)</strong></td>
-<td><strong>目前所在行的第一个非空格符进入输入模式</strong></td>
+<td>SHELL</td>
+<td>用户使用的 Shell 解释器名称</td>
 </tr>
 <tr>
-<td><strong>a</strong></td>
-<td><strong>从光标下一个字符进入 输入模式</strong></td>
+<td><strong>PATH</strong></td>
+<td><strong>定义命令行解释器搜索用户执行命令的路径</strong></td>
 </tr>
 <tr>
-<td><strong>A</strong></td>
-<td><strong>目前所在行的行尾进入输入模式</strong></td>
+<td>MAIL</td>
+<td>邮件保存路径</td>
 </tr>
 <tr>
-<td><strong>o</strong></td>
-<td><strong>从光标所在行的下一行进入输入模式</strong></td>
+<td>RANDOM</td>
+<td>生成一个随机数字</td>
 </tr>
 <tr>
-<td><strong>O</strong></td>
-<td><strong>从光标所在行的上一行进入输入模式</strong></td>
-</tr>
-<tr>
-<td><strong>r</strong></td>
-<td><strong>进入替换模式，替换光标所在字符，只会进行一次替换</strong></td>
-</tr>
-<tr>
-<td><strong>R</strong></td>
-<td><strong>进入替换模式，会一直替换光标所在 字符，替换后光标后移，直到按ESC键退出替换模式</strong></td>
+<td>LANG</td>
+<td>系统语言、语系名称</td>
 </tr>
 </tbody></table>
-<h3 id="Vim底线命令模式"><a href="#Vim底线命令模式" class="headerlink" title="Vim底线命令模式"></a>Vim底线命令模式</h3><p>一般情况下可以通过命令模式下按<code>:</code>进入 指令行模式，如果我们在编辑模式，可以先</p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>:w</td>
-<td>将编辑的数据写保存</td>
-</tr>
-<tr>
-<td>:w!</td>
-<td>若文件为只读时强制保存，但能不能执行成功与用户对文件的权限有关</td>
-</tr>
-<tr>
-<td>:q</td>
-<td>退出vim</td>
-</tr>
-<tr>
-<td>:q!</td>
-<td>如果修改过文件又不想保存，可以使用!强制退出</td>
-</tr>
-<tr>
-<td>:wq</td>
-<td>保存并退出</td>
-</tr>
-<tr>
-<td>:wq!</td>
-<td>强制保存并退出</td>
-</tr>
-<tr>
-<td><strong>:x</strong></td>
-<td><strong>保存并退出</strong></td>
-</tr>
-<tr>
-<td>:[n1],[n2] w filename</td>
-<td>保存n1到n2行的内容到filename中，n1，n2为行号范围，如果n1，n2省略则默认到1行到最后一行，类似于另存为</td>
-</tr>
-<tr>
-<td>:! command</td>
-<td>暂时离开vim去执行command命令</td>
-</tr>
-<tr>
-<td><strong>:%s&#x2F;word1&#x2F;word2&#x2F;g[c]</strong></td>
-<td><strong>从第一行到最后一行寻找 word1 字符串，并将该字符串取代为 word2，加上c为在每次替换时需要用户确认</strong></td>
-</tr>
-<tr>
-<td><strong>:n1,n2s&#x2F;word1&#x2F;word2&#x2F;g[c]</strong></td>
-<td><strong>从第n1行到n2行寻找 word1 字符串，并将该字符串取代为 word2，n1，n2为行号，加上c为在每次替换时需要用户确认</strong></td>
-</tr>
-</tbody></table>
-<h3 id="Vim设置"><a href="#Vim设置" class="headerlink" title="Vim设置"></a>Vim设置</h3><p>这里列几个常用的，可以在命令模式下输入进行该次临时生效</p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>set nu</td>
-<td>显示行号</td>
-</tr>
-<tr>
-<td>set nonu</td>
-<td>取消行号显示</td>
-</tr>
-<tr>
-<td>syntax on&#x2F;off</td>
-<td>开启&#x2F;关闭高亮</td>
-</tr>
-<tr>
-<td>set tabstop&#x3D;4</td>
-<td>设置tab的缩进为4格</td>
-</tr>
-<tr>
-<td>set shiftwidth&#x3D;4</td>
-<td>设置移动命令的缩进为4格</td>
-</tr>
-</tbody></table>
-<p>如果想入设置生效则可以编辑<code>/etc/vimrc</code>文件，该文件对系统所有用户生效，如果只想改变当前用户的vim设置，可以在用户家目录下创建<code>.vimrc</code>文件进行设置</p>
-<h3 id="Vim键盘图"><a href="#Vim键盘图" class="headerlink" title="Vim键盘图"></a>Vim键盘图</h3><p>这张图是网上流传比较广的一张图，出自<a target="_blank" rel="noopener" href="http://www.viemu.com/">www.viemu.com</a>，当然另一位大佬<a target="_blank" rel="noopener" href="http://cenalulu.github.io/">cenalulu</a>的博客上也有进阶版大家感兴趣可以去看看<a target="_blank" rel="noopener" href="http://cenalulu.github.io/linux/all-vim-cheatsheat/">史上最全Vim快捷键键位图 – 入门到进阶</a></p>
-<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230118/ec45de7352ad4bd09aae45189a8eca99.gif" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230118/ec45de7352ad4bd09aae45189a8eca99.gif"></p>
-<h2 id="Vim批量注释"><a href="#Vim批量注释" class="headerlink" title="Vim批量注释"></a>Vim批量注释</h2><p>我们将<code>/etc/profile</code>考到桌面进行练习</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> /etc/profile ~/</span><br></pre></td></tr></table></figure>
-
-<h3 id="指令行模式注释"><a href="#指令行模式注释" class="headerlink" title="指令行模式注释"></a>指令行模式注释</h3><p>我们使用vim打开刚刚考过来的profile文件，使用指令行进行替换</p>
+<h3 id="环境变量的分类"><a href="#环境变量的分类" class="headerlink" title="环境变量的分类"></a>环境变量的分类</h3><ul>
+<li><p>按生命周期分：</p>
 <ul>
-<li>在每行行首加上<code>#</code></li>
+<li><p>永久的：在环境变量脚本文件中配置，用户每次登录时会自动执行这些脚本，相当于永久生效。</p>
+</li>
+<li><p>临时的：用户利用export命令，在当前终端下声明环境变量，关闭Shell终端失效。</p>
+</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s/^/<span class="comment">#/g</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>按作用域分：	</p>
+<ul>
+<li><p>系统环境变量：公共的，对全部的用户都生效。</p>
+</li>
+<li><p>用户环境变量：用户私有的、自定义的个性化设置，只对该用户生效。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="永久环境变量设置"><a href="#永久环境变量设置" class="headerlink" title="永久环境变量设置"></a>永久环境变量设置</h3><ul>
+<li><code>/etc/profile</code>：用户使用交互式登录到环境中时该文件会被执行，用户可以在此设置一些全局信息</li>
+<li><code>~/.bash_profile</code>：用户使用交互式登录到环境中时执行完&#x2F;etc&#x2F;profile就会执行该文件，用户可以在些设置一些自己的环境信息</li>
+<li><code>~/.bashrc</code>：用户使用非交互式登录系统会执行该文件，但在<code>~/.bash_profile</code>默认情况下会调用<code>~/.bashrc</code></li>
+</ul>
+<h3 id="source命令"><a href="#source命令" class="headerlink" title="source命令"></a>source命令</h3><p><code>source</code>命令可以在当前bash环境下读取并执行FileName中的命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source filename <span class="comment"># filename文件为一个shell脚本文件</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="PATH环境变量"><a href="#PATH环境变量" class="headerlink" title="PATH环境变量"></a>PATH环境变量</h3><p>path环境变量的值就是通过’:’所分割的一系列的路径，如图：</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230209/3a6c77ca562b4d0dbf56a7950757dcac.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230209/3a6c77ca562b4d0dbf56a7950757dcac.png"></p>
+<p>当我们执行某个命令时，命令解释器会根据PATH记录的这些路径依次在这些路径去检索</p>
+<h2 id="练习：jdk安装"><a href="#练习：jdk安装" class="headerlink" title="练习：jdk安装"></a>练习：jdk安装</h2><p><code>jdk</code>即 <strong>Java Development kit</strong>，Java开发工具包，也就是常说的Java开发环境，我们来在我们的<code>Linux</code>主机上对其做一个安装，体验一下环境变量</p>
+<p>我们的系统中自带了<code>open-jdk</code>，但我们还没有学<code>yum</code>相关知识，所以就先不卸载了，直接安装</p>
+<ul>
+<li><p>jdk下载地址：<a target="_blank" rel="noopener" href="https://repo.huaweicloud.com/java/jdk/">https://repo.huaweicloud.com/java/jdk/</a></p>
+</li>
+<li><p>我这里以<code>8u192</code>版本为例，在主机上执行<code>wget</code>用于下载jdk的包</p>
+</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">wget</span> https://repo.huaweicloud.com/java/jdk/<span class="number">8</span>u192<span class="literal">-b12</span>/jdk<span class="literal">-8u192-linux-x64</span>.tar.gz</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>取消每行行首的<code>#</code></li>
+<li>将其解压到<code>/usr/local</code>下</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s/^<span class="comment">#//g</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar <span class="literal">-zxvf</span> jdk<span class="literal">-8u192-linux-x64</span>.tar.gz <span class="literal">-C</span> /usr/local</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>在每行行首加上<code>//</code>进行注释</li>
+<li>目录介绍</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s/^/\/\//g</span><br></pre></td></tr></table></figure>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230223/76274ab1ab274635b7de4e45dbce5153.png" alt="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/20230223/76274ab1ab274635b7de4e45dbce5153.png"></p>
+<ul>
+<li>我们需要做的是<ul>
+<li>创建<code>JAVA_HOME</code>环境变量，变量值为java的安装目录</li>
+<li>创建<code>CLASS_PATH</code>环境变量，变量值为<code>.</code>及<code>lib</code>目录下的<code>tools.jar</code>及<code>dt.jar</code>文件</li>
+<li>将存放java可执行文件的目录加入<code>PATH</code>环境变量中</li>
+</ul>
+</li>
+<li>修改<code>/etc/profile</code>使其对所有用户生效，在最下面加入如下环境变量</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/jdk1.<span class="number">8.0</span>_192</span><br><span class="line">export CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib/tools.jar:<span class="variable">$JAVA_HOME</span>/lib/dt.jar</span><br><span class="line">export PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>取消每行行首的<code>//</code></li>
+<li><code>/etc/profile</code>文件会在用户交互式登录到环境时被执行，此时我们可以重新登录，也可以<code>source</code>命令使其在当前环境生效</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s/^\/\//g</span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>在1到10行行首加上<code>#</code>注释</li>
+<li>执行<code>java -version</code>来验证</li>
 </ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:<span class="number">1</span>,<span class="number">10</span>s/^/<span class="comment">#/g</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java <span class="literal">-version</span></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>替换文中<code>pathmunge</code>为<code>linux</code></li>
-</ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:%s/pathmunge/linux/g</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>撤销所有操作</li>
-</ul>
-<h3 id="可视块批量注释"><a href="#可视块批量注释" class="headerlink" title="可视块批量注释"></a>可视块批量注释</h3><ul>
-<li>使用可视块以块为区域进行选择<code>Ctrl+v</code>第5到第10行行首</li>
-<li>按<code>I(大写i)</code>进行行首插入</li>
-<li>插入一个<code>#</code>加一个<code>空格</code></li>
-<li>按<code>ESC</code>退出编辑即可生效</li>
-</ul>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这节课没有讲什么命令，主要就是<code>vim</code>编辑器的使用，以后我们编辑文件就不用再依赖图形窗口进行编辑了</p>
-<p>但这个vim的指令和快捷键太多了，这个只能大家自己在使用时慢慢用，慢慢的就熟悉了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这节课学习了一些新命令和环境变量，有了这些东西我们就可以自已手动安装一些程序如Python、NodeJs等</p>
 
       
     </div>
@@ -877,7 +709,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://study.kevinlu98.cn/2023/01/16/wen-ben-bian-ji-qi.html" title="(四)vim文本编辑器" target="_blank" rel="external">https://study.kevinlu98.cn/2023/01/16/wen-ben-bian-ji-qi.html</a>
+      <a href="https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html" title="(七)Linux环境变量" target="_blank" rel="external">https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html</a>
     </li>
     
     <li class="post-copyright-license">
@@ -924,12 +756,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2023/02/01/wen-ben-chu-li.html" title="(五)Linux文本处理"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      <a href="/2023/02/27/bao-guan-li-ji-jiao-ben.html" title="(八)Linux包管理及shell脚本"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2023/01/15/zhong-ding-xiang-yu-guan-dao.html" title="(三)重定向与管道"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2023/02/03/yong-hu-yu-zu.html" title="(六)Linux用户与权限"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     

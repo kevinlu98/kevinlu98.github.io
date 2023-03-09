@@ -1,3 +1,5 @@
+https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html
+https://study.kevinlu98.cn/2023/02/27/bao-guan-li-ji-jiao-ben.html
 https://study.kevinlu98.cn/2023/02/03/yong-hu-yu-zu.html
 https://study.kevinlu98.cn/2023/01/16/wen-ben-bian-ji-qi.html
 https://study.kevinlu98.cn/2023/02/01/wen-ben-chu-li.html
@@ -25,8 +27,8 @@ https://study.kevinlu98.cn/2022/10/07/huan-cun-chu-li-ji-shou-ye-wen-zhang-de-li
 https://study.kevinlu98.cn/2022/10/06/wan-cheng-dao-hang-guan-li-ji-tong-yi-yi-chang-chu-li.html
 https://study.kevinlu98.cn/2022/10/06/qian-tai-ye-mian-de-dao-ru-ji-gong-gong-shu-ju-de-pei-zhi.html
 https://study.kevinlu98.cn/2022/10/06/wen-zhang-guan-li-de-duo-tiao-jian-fen-ye-cha-xun.html
-https://study.kevinlu98.cn/2022/10/06/wan-cheng-xin-zeng-ji-bian-ji-wen-zhang-gong-neng.html
 https://study.kevinlu98.cn/2022/10/06/wei-wen-zhang-jia-ru-zhi-chi.html
+https://study.kevinlu98.cn/2022/10/06/wan-cheng-xin-zeng-ji-bian-ji-wen-zhang-gong-neng.html
 https://study.kevinlu98.cn/2022/10/01/xiang-mu-jie-shao-ji-kuang-jia-da-jian.html
 https://study.kevinlu98.cn/2023/01/13/xi-lie-jiao-cheng-jie-shao.html
 https://study.kevinlu98.cn/feedback/index.html
@@ -51,6 +53,9 @@ https://study.kevinlu98.cn/tags/sed/
 https://study.kevinlu98.cn/tags/awk/
 https://study.kevinlu98.cn/tags/%E7%94%A8%E6%88%B7/
 https://study.kevinlu98.cn/tags/%E6%9D%83%E9%99%90/
+https://study.kevinlu98.cn/tags/shell/
+https://study.kevinlu98.cn/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/
+https://study.kevinlu98.cn/tags/yum/
 https://study.kevinlu98.cn/tags/java/
 https://study.kevinlu98.cn/tags/springboot/
 https://study.kevinlu98.cn/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/
