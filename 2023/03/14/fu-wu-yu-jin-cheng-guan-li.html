@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>(九)Linux服务与进程管理 | 冷文聊编辑</title>
+  <meta name="description" content="前言随着前面那些命令的学习及掌握，我们的教程也逐渐来到了尾声，我相信大家也渐渐的可以使用Linux操作系统，这节课就给大家讲讲服务与进程的管理，让大家对Linux系统的运行有个初步的认识和理解 进程基本概念我们先来看下什么是进程？ Linux中每个执行的程序都称为一个进程，且每个进程都会都会对应一个进程ID(PID) 进程可以以两种方式存在：  前台：用户当前屏幕正在操作的进程 后台：用户实际在操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(九)Linux服务与进程管理">
+<meta property="og:url" content="https://study.kevinlu98.cn/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html">
+<meta property="og:site_name" content="冷文聊编辑">
+<meta property="og:description" content="前言随着前面那些命令的学习及掌握，我们的教程也逐渐来到了尾声，我相信大家也渐渐的可以使用Linux操作系统，这节课就给大家讲讲服务与进程的管理，让大家对Linux系统的运行有个初步的认识和理解 进程基本概念我们先来看下什么是进程？ Linux中每个执行的程序都称为一个进程，且每个进程都会都会对应一个进程ID(PID) 进程可以以两种方式存在：  前台：用户当前屏幕正在操作的进程 后台：用户实际在操">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678796460897.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678796519934.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678793888119.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678800563813.png">
+<meta property="og:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678801967385.png">
+<meta property="article:published_time" content="2023-03-14T03:03:00.000Z">
+<meta property="article:modified_time" content="2023-03-14T14:09:14.444Z">
+<meta property="article:author" content="Mr丶冷文">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="centos">
+<meta property="article:tag" content="shell">
+<meta property="article:tag" content="yum">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678796460897.png">
+  <meta name="keywords" content="冷文聊编辑,冷文博客,编辑学习,java学习,golang学习,网站设计,coding,linux学习,教程网">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://study.kevinlu98.cn/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html">
+  
+    <link rel="alternate" href="/atom.xml" title="冷文聊编辑" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css">
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/kevinlu98" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Mr丶冷文</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Golang Engineer &amp; Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanxi, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-feedback">
+          <a href="/feedback">
+            
+            <i class="icon icon-qzone"></i>
+            
+            <span class="menu-title">留言</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>冷文聊编辑【study.kevinlu98.cn】，主要分享B站教程中用到的课件及资料，主站为：<a target="_blank" rel="noopener" href="https://kevinlu98.cn">kevinlu98.cn</a>，欢迎大家访问</p><p>我也买了<a target="_blank" rel="noopener" href="https://www.itjc8.com/">https://www.itjc8.com/</a>这个网站的会员，大家如果在这个网站有想下载的东西请联系我，我发下载地址给大家<br> 当然如果你想请我喝杯咖啡，请扫下方二维码<br></p><div class="notice-donate"><img src="/images/donate/alipayimg.png"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%A1%B9%E7%9B%AE/">个人博客项目</a><span class="category-list-count">25</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/awk/" style="font-size: 13px;">awk</a> <a href="/tags/centos/" style="font-size: 13.5px;">centos</a> <a href="/tags/grep/" style="font-size: 13px;">grep</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/linux/" style="font-size: 13.67px;">linux</a> <a href="/tags/sed/" style="font-size: 13px;">sed</a> <a href="/tags/shell/" style="font-size: 13.33px;">shell</a> <a href="/tags/springboot/" style="font-size: 14px;">springboot</a> <a href="/tags/vim/" style="font-size: 13px;">vim</a> <a href="/tags/vmware/" style="font-size: 13px;">vmware</a> <a href="/tags/yum/" style="font-size: 13.17px;">yum</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;">个人博客</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F/" style="font-size: 13.83px;">博客系统</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/" style="font-size: 13px;">基础命令</a> <a href="/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" style="font-size: 13.33px;">异常处理</a> <a href="/tags/%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/" style="font-size: 13px;">文本处理</a> <a href="/tags/%E6%9D%83%E9%99%90/" style="font-size: 13px;">权限</a> <a href="/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" style="font-size: 13px;">环境变量</a> <a href="/tags/%E7%94%A8%E6%88%B7/" style="font-size: 13px;">用户</a> <a href="/tags/%E7%AE%A1%E9%81%93/" style="font-size: 13px;">管道</a> <a href="/tags/%E9%87%8D%E5%AE%9A%E5%90%91/" style="font-size: 13px;">重定向</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-03-14T03:03:00.000Z" itemprop="datePublished">2023-03-14</time> <a href="/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html" class="title">(九)Linux服务与进程管理</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-03-14T03:03:00.000Z" itemprop="datePublished">2023-03-14</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-03-01T03:03:00.000Z" itemprop="datePublished">2023-03-01</time> <a href="/2023/03/01/bao-guan-li-ji-jiao-ben.html" class="title">(八)Linux包管理及shell脚本</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-03-01T03:03:00.000Z" itemprop="datePublished">2023-03-01</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-02-26T03:03:00.000Z" itemprop="datePublished">2023-02-26</time> <a href="/2023/02/26/huan-jing-bian-liang.html" class="title">(七)Linux环境变量</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-02-26T03:03:00.000Z" itemprop="datePublished">2023-02-26</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-02-03T03:03:00.000Z" itemprop="datePublished">2023-02-03</time> <a href="/2023/02/03/yong-hu-yu-zu.html" class="title">(六)Linux用户与权限</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-02-03T03:03:00.000Z" itemprop="datePublished">2023-02-03</time>
+              </p> -->
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <!-- <p class="item-category">
+                <a class="category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+              </p> -->
+              <p class="item-title">
+                <time datetime="2023-02-01T03:03:00.000Z" itemprop="datePublished">2023-02-01</time> <a href="/2023/02/01/wen-ben-chu-li.html" class="title">(五)Linux文本处理</a>
+              </p>
+              <!-- <p class="item-date">
+                <time datetime="2023-02-01T03:03:00.000Z" itemprop="datePublished">2023-02-01</time>
+              </p> -->
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">创建进程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E5%8F%B0%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.1.</span> <span class="toc-text">前台进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.2.</span> <span class="toc-text">后台进程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-number">2.3.</span> <span class="toc-text">进程相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ps-%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.3.1.</span> <span class="toc-text">ps[查看进程]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pstree-%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E6%A0%91"><span class="toc-number">2.3.2.</span> <span class="toc-text">pstree[查看进程树]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#top-%E5%AE%9E%E6%97%B6%E8%BF%9B%E7%A8%8B%E5%8A%A8%E6%80%81"><span class="toc-number">2.3.3.</span> <span class="toc-text">top[实时进程动态]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kill-%E7%BB%88%E6%AD%A2%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.3.4.</span> <span class="toc-text">kill[终止进程]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#lsof-%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.3.5.</span> <span class="toc-text">lsof[端口占用查看进程]</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.</span> <span class="toc-text">服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-number">3.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#systemctl-%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1"><span class="toc-number">3.2.</span> <span class="toc-text">systemctl[管理服务]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%EF%BC%9A%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">3.3.</span> <span class="toc-text">练习：关闭防火墙</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#scp%E8%BF%9C%E7%A8%8B%E5%A4%8D%E5%88%B6"><span class="toc-number">3.3.1.</span> <span class="toc-text">scp远程复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#rz-x2F-sz%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD"><span class="toc-number">3.3.2.</span> <span class="toc-text">rz&#x2F;sz上传下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sftp%E4%B8%8A%E4%BC%A0"><span class="toc-number">3.3.3.</span> <span class="toc-text">sftp上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E5%BC%80%E5%A7%8B"><span class="toc-number">3.3.4.</span> <span class="toc-text">实战开始</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-linux/9.Linux服务与进程管理" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (九)Linux服务与进程管理
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html" class="article-date">
+	  <time datetime="2023-03-14T03:03:00.000Z" itemprop="datePublished">2023-03-14</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Linux%E8%8F%9C%E9%B8%9F%E5%85%A5%E9%97%A8/">Linux菜鸟入门</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/centos/" rel="tag">centos</a>, <a class="article-tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="article-tag-link-link" href="/tags/shell/" rel="tag">shell</a>, <a class="article-tag-link-link" href="/tags/yum/" rel="tag">yum</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>随着前面那些命令的学习及掌握，我们的教程也逐渐来到了尾声，我相信大家也渐渐的可以使用<code>Linux</code>操作系统，这节课就给大家讲讲服务与进程的管理，让大家对Linux系统的运行有个初步的认识和理解</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>我们先来看下什么是进程？</p>
+<p>Linux中每个执行的程序都称为一个进程，且每个进程都会都会对应一个进程ID(<strong>PID</strong>)</p>
+<p>进程可以以两种方式存在：</p>
+<ul>
+<li>前台：用户当前屏幕正在操作的进程</li>
+<li>后台：用户实际在操作，但屏幕上未显示</li>
+</ul>
+<p>如果一个进程是由另一个进程创建的，则称该进程为创建它的进程的<strong>子进程</strong>，称创建其的进程为它的<strong>父进程</strong></p>
+<p>如果一个完成了生命周期但却依然留在进程表中的进程，我们称之为 <strong>僵尸进程</strong></p>
+<p>如果一个进程以后台进程形式常驻系统中并提供系统服务，我们则称之为<strong>守护进程</strong></p>
+<h3 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h3><h4 id="前台进程"><a href="#前台进程" class="headerlink" title="前台进程"></a>前台进程</h4><p>前台进程指在终端中运行的进程，一旦这这终端关闭，这个进程也会随之消失，当然我们也可以通过<code>Ctrl + C</code>来终止进程</p>
+<p>我们写个简单的程序体会一下</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">while</span> true</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        <span class="built_in">echo</span> `date`</span><br><span class="line">        <span class="built_in">sleep</span> <span class="number">1</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p>为其加上执行权限并执行，可以看到每隔一秒会向屏幕打印一下时间</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x start.sh &amp;&amp; ./start.sh</span><br></pre></td></tr></table></figure>
+
+<p>我们结束进程然后将输出重定向到1.txt</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./start.sh &gt; <span class="number">1</span>.txt</span><br></pre></td></tr></table></figure>
+
+<p>我们另起一个终端来监听<code>1.txt</code>，可以看到每隔一秒文件会多一行内容，说明我们的<code>start.sh</code>在执行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail <span class="operator">-f</span> <span class="number">1</span>.txt</span><br></pre></td></tr></table></figure>
+
+<p>我们关闭<code>start.sh</code>那个终端，再来看监听的这边，可以看到文件中已经没有内容输出了</p>
+<p>我们还可以在前台进程执行时使用<code>Ctrl + Z</code>将其挂起到后台，但这个时候进程会被暂停，可以看到屏幕上输出了一个序号，我们可以使用这个序号用<code>fg</code>切换该进程到前台，当然我们也可以使用<code>bg</code>将一个后台暂停的进程变为后台执行</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678796460897.png"></p>
+<p>我们也可以通过<code>jobs</code>命令来查看被我们挂到后台的进程</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678796519934.png"></p>
+<p>这里总结了个表格大家可以看看</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl + Z</td>
+<td>可以把这个进程放到后台执行，但进程会被暂停</td>
+</tr>
+<tr>
+<td>jobs</td>
+<td>查看当前有多少在后台运行的进程.它是一个作业控制命令</td>
+</tr>
+<tr>
+<td>fg</td>
+<td>将后台中的命令调至前台继续运行是通过，参数是 jobs 命令查到的后台正在执行的命令的序号（不是 pid)</td>
+</tr>
+<tr>
+<td>bg</td>
+<td>将一个在后台暂停的命令，变成继续执行，参数是 jobs 命令查到的后台正在执行的命令的序号（不是 pid)</td>
+</tr>
+</tbody></table>
+<h4 id="后台进程"><a href="#后台进程" class="headerlink" title="后台进程"></a>后台进程</h4><p>后台进程也叫守护进程,是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件，开启进程后台运行的方式有三种:</p>
+<ul>
+<li>在执行的命令后面添加 <code>&amp;</code> 符号</li>
+<li>利用 <code>ctrl + z</code> 和 <code>bg</code>搭配</li>
+<li>使用 <code>nohup</code> 的方式后台运行进程(常用)</li>
+</ul>
+<p>分别使用上述三种方法后台启动<code>start.sh</code>，可以使用<code>kill -9 pid</code>终止一个进程</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./start.sh &gt; <span class="number">1</span>.txt &amp;</span><br><span class="line">./start.sh &gt; <span class="number">1</span>.txt </span><br><span class="line">ctrl + z</span><br><span class="line">bg <span class="number">1</span></span><br><span class="line">nohup ./start.sh &gt; <span class="number">1</span>.txt </span><br></pre></td></tr></table></figure>
+
+<h3 id="进程相关命令"><a href="#进程相关命令" class="headerlink" title="进程相关命令"></a>进程相关命令</h3><h4 id="ps-查看进程"><a href="#ps-查看进程" class="headerlink" title="ps[查看进程]"></a>ps[查看进程]</h4><p>Linux ps （英文全拼：process status）命令用于显示当前进程的状态，类似于 windows 的任务管理器，有如下参数：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>显示所有终端机下该用户执行的进程</td>
+</tr>
+<tr>
+<td>a</td>
+<td>显示现行终端机下的所有进程，包括其他用户的进程</td>
+</tr>
+<tr>
+<td>-A,-e</td>
+<td>显示所有进程</td>
+</tr>
+<tr>
+<td>e</td>
+<td>列出进程时，显示每个进程所使用的环境变量</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>显示UID,PPIP,C与STIME栏位</td>
+</tr>
+<tr>
+<td>f</td>
+<td>用ASCII字符显示树状结构，表达进程间的相互关系</td>
+</tr>
+<tr>
+<td>u</td>
+<td>以用户为主的格式来显示进程状况，增加列 User、%CPU、%MEM、VSZ、RSS等</td>
+</tr>
+<tr>
+<td>-u&lt;用户名&gt;</td>
+<td>按用户名筛选进程</td>
+</tr>
+<tr>
+<td>x</td>
+<td>显示所有进程，不以终端机来区分</td>
+</tr>
+</tbody></table>
+<p>看完这个参数表我们来理解这些参数的含义，对比下输出，我们就知道为什么你经常在网上的贴子中有看到<code>ps aux</code>了</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ps</span> <span class="literal">-a</span></span><br><span class="line"><span class="built_in">ps</span> a</span><br><span class="line"><span class="built_in">ps</span> <span class="literal">-x</span></span><br><span class="line"><span class="built_in">ps</span> ax</span><br><span class="line"><span class="comment"># 可以给上述命令加上u参数来看执行进程和用户</span></span><br></pre></td></tr></table></figure>
+
+<p>我们不难发现，当我们执行<code>ps ax</code>时我们可以看到所有用户的所有进程，这个时候再加上参数<code>u</code>就可以显示这些进程和详细信息了</p>
+<p>这时有人要说了<code>-A</code>或<code>-e</code>参数本身不就是这样吗？对的，但如果我们需要打印详细信息时就会有问题，因为<code>aux</code>这三个参数都是不加<code>-</code>的，所以我们可以写在一起，但如果使用<code>-e</code>或<code>-A</code>，命令就成了<code>ps -A u</code>或<code>ps -e u</code>，我们就需要区别加<code>-</code>的参数和不加的参数，所以一般<code>-A</code>和<code>-e</code>与<code>-f</code>一起使用<code>ps -ef</code>或<code>ps -Af</code>，而<code>ax</code>与<code>u</code>一起使用<code>ps aux</code><br>为什么网上很多人都写<code>-aux</code>，这是因为<code>Linux</code>命令参数一般会加上<code>-</code>，但<code>-aux</code>中<code>u</code>如果加<code>-</code>必须要配合参数使用，但我们又没有给参数，所以这里就是不带<code>-</code>的<code>u</code>，这里<code>aux</code>又是放到了一起，所以这里以<code>u</code>为主，都不加<code>-</code>，比如我们执行<code>ps -eu</code>也是如此，它调用的是不加<code>-</code>的<code>e</code>参数而非<code>-e</code>，所以就打印出了环境变量，而<code>-A</code>这里因为没有对应的不加<code>-</code>的参数，所以执行<code>ps -Au</code>会报错</p>
+<p>ps进程表字段说明</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>USER,UID</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>进程 ID</td>
+</tr>
+<tr>
+<td>PPID</td>
+<td>父进程 ID</td>
+</tr>
+<tr>
+<td>%CPU,C</td>
+<td>cpu使用率</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>内存占用率</td>
+</tr>
+<tr>
+<td>VSZ</td>
+<td>占用的虚拟内存，单位 KB</td>
+</tr>
+<tr>
+<td>RSS</td>
+<td>占用的物理内存，单位 KB</td>
+</tr>
+<tr>
+<td>TTY</td>
+<td>使用的终端: ? 表示与终端无关;pts&#x2F;0 表示由网络连接的进程</td>
+</tr>
+<tr>
+<td>START</td>
+<td>进程启动时间</td>
+</tr>
+<tr>
+<td>TIME,STIME</td>
+<td>进程占用 CPU 的总时间，单位分钟（00:05 表示5分钟）</td>
+</tr>
+<tr>
+<td>COMMAND,CMD</td>
+<td>进程启动时的命令行</td>
+</tr>
+<tr>
+<td>STAT</td>
+<td>进程状态，具体含义如下</td>
+</tr>
+</tbody></table>
+<p>进程STAT状态含义：</p>
+<ul>
+<li>D: 无法中断的休眠状态 (通常 IO 的进程)</li>
+<li>R: run，正在执行中</li>
+<li>S: sleep，静止状态</li>
+<li>T: 暂停执行</li>
+<li>Z: 不存在但暂时无法消除</li>
+<li>W: 没有足够的记忆体分页可分配</li>
+<li>&lt;: 高优先序的行程</li>
+<li>N: 低优先序的行程</li>
+<li>L: 有记忆体分页分配并锁在记忆体内 (实时系统或捱A I&#x2F;O)</li>
+<li>s：进程的领导者，其下有子进程</li>
+<li>|：多线程，克隆线程</li>
+<li>+：位于后台的进程组</li>
+</ul>
+<h4 id="pstree-查看进程树"><a href="#pstree-查看进程树" class="headerlink" title="pstree[查看进程树]"></a>pstree[查看进程树]</h4><p>Linux pstree(英文全称：display a tree of processes）) 命令将所有进程以树状图显示，树状图将会以 pid (如果有指定) 或是以 init 这个基本进程为根 (root)，如果有指定使用者 id，则树状图会只显示该使用者所拥有的进程</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pstree [-<span class="type">a</span>] <span class="comment"># 显示该进程的完整指令及参数</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="top-实时进程动态"><a href="#top-实时进程动态" class="headerlink" title="top[实时进程动态]"></a>top[实时进程动态]</h4><p>Linux top命令用于实时显示 process 的动态，有如下参数</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d</td>
+<td>改变显示的更新速度，或是在交谈式指令列( interactive command)按 s</td>
+</tr>
+<tr>
+<td>n</td>
+<td>更新的次数，完成后将会退出 top</td>
+</tr>
+<tr>
+<td>p</td>
+<td>显示指定进程id的进程信息</td>
+</tr>
+<tr>
+<td>i</td>
+<td>忽略僵尸进程</td>
+</tr>
+</tbody></table>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678793888119.png"></p>
+<p><strong>时间行</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>top</td>
+<td>当前时间</td>
+</tr>
+<tr>
+<td>up</td>
+<td>系统运行时间</td>
+</tr>
+<tr>
+<td>users</td>
+<td>当前登录用户数量</td>
+</tr>
+<tr>
+<td>load average</td>
+<td>负载均值</td>
+</tr>
+</tbody></table>
+<p><strong>进程统计</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>total</td>
+<td>总计进程数</td>
+</tr>
+<tr>
+<td>running</td>
+<td>运行中进程数</td>
+</tr>
+<tr>
+<td>sleeping</td>
+<td>睡眠中进程数</td>
+</tr>
+<tr>
+<td>stop</td>
+<td>停止进程数</td>
+</tr>
+<tr>
+<td>zombie</td>
+<td>闲置&#x2F;僵尸进程数</td>
+</tr>
+</tbody></table>
+<p><strong>内存行</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>total</td>
+<td>总共</td>
+</tr>
+<tr>
+<td>used</td>
+<td>使用中</td>
+</tr>
+<tr>
+<td>free</td>
+<td>空闲</td>
+</tr>
+<tr>
+<td>buffers&#x2F;cache</td>
+<td>缓存&#x2F;缓冲</td>
+</tr>
+</tbody></table>
+<p><strong>CPU 行&#x2F;交换行</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>us (user space)</td>
+<td>用户占用 cpu率</td>
+</tr>
+<tr>
+<td>sy (system)</td>
+<td>系统占用 cpu率</td>
+</tr>
+<tr>
+<td>ni (nice)</td>
+<td>改变过优先级的进程占用CPU的百分比</td>
+</tr>
+<tr>
+<td>id (idolt)</td>
+<td>空闲CPU率</td>
+</tr>
+<tr>
+<td>wa (wait)</td>
+<td>IO等待占用CPU的百分比</td>
+</tr>
+<tr>
+<td>hi (Hardware IRQ)</td>
+<td>硬中断占用CPU的百分比</td>
+</tr>
+<tr>
+<td>si (Software Interrupts)</td>
+<td>软中断占用CPU的百分比</td>
+</tr>
+</tbody></table>
+<p><strong>字段说明</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PID</td>
+<td>进程id</td>
+</tr>
+<tr>
+<td>USER</td>
+<td>进程所有者</td>
+</tr>
+<tr>
+<td>PR</td>
+<td>进程优先级</td>
+</tr>
+<tr>
+<td>NI</td>
+<td>nice值。负值表示高优先级，正值表示低优先级</td>
+</tr>
+<tr>
+<td>VIRT</td>
+<td>进程使用的虚拟内存总量，单位kb。VIRT&#x3D;SWAP+RES</td>
+</tr>
+<tr>
+<td>RES</td>
+<td>进程使用的、未被换出的物理内存大小，单位kb。RES&#x3D;CODE+DATA</td>
+</tr>
+<tr>
+<td>SHR</td>
+<td>共享内存大小，单位kb</td>
+</tr>
+<tr>
+<td>S</td>
+<td>进程状态。D&#x3D;不可中断的睡眠状态 R&#x3D;运行 S&#x3D;睡眠 T&#x3D;跟踪&#x2F;停止 Z&#x3D;僵尸进程</td>
+</tr>
+<tr>
+<td>%CPU</td>
+<td>上次更新到现在的CPU时间占用百分比</td>
+</tr>
+<tr>
+<td>%MEM</td>
+<td>进程使用的物理内存百分比</td>
+</tr>
+<tr>
+<td>TIME+</td>
+<td>进程使用的CPU时间总计，单位1&#x2F;100秒</td>
+</tr>
+<tr>
+<td>COMMAND</td>
+<td>进程名称（命令名&#x2F;命令行）</td>
+</tr>
+</tbody></table>
+<h4 id="kill-终止进程"><a href="#kill-终止进程" class="headerlink" title="kill[终止进程]"></a>kill[终止进程]</h4><p>kill 可将指定的信息送至程序。预设的信息为 SIGTERM(15)，可将指定程序终止。若仍无法终止该程序，可使用 SIGKILL(9) 信息尝试强制删除程序</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> [-&lt;信息名称或编号&gt;][程序]</span><br></pre></td></tr></table></figure>
+
+<p>进程编号信息：</p>
+<ul>
+<li>1 (HUP)：重新加载进程。</li>
+<li>9 (KILL)：杀死一个进程。</li>
+<li>15 (TERM)：正常停止一个进程</li>
+</ul>
+<h4 id="lsof-端口占用查看进程"><a href="#lsof-端口占用查看进程" class="headerlink" title="lsof[端口占用查看进程]"></a>lsof[端口占用查看进程]</h4><p>lsof(list open files)是一个列出当前系统打开文件的工具,通常用其查看某个端口被那个程序占用</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsof <span class="literal">-i</span>[:端口号]</span><br><span class="line"><span class="comment"># 不加端口号查看所有</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以先后台运行一个redis-server，然后再启动redis-server，发现提示<code>6379</code>端口被占用</p>
+<p>这个时候我们就可以用<code>lsof -i:6379</code>来查看<code>6379</code>被那个进程占用了，kill掉该进程然后我们又能启动redis-server了</p>
+<h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2><h3 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h3><p>服务的本质其实就是后台进程，即守护进程，一般情况下随系统启动而启动，在CentOS7中采用<code>systemd</code>管理服务，一般情况下每个服务会对应一个*.service文件，目录在<code>/usr/lib/systemd/system</code>下</p>
+<h3 id="systemctl-管理服务"><a href="#systemctl-管理服务" class="headerlink" title="systemctl[管理服务]"></a>systemctl[管理服务]</h3><p>基本上服务的管理都是通过<code>systemctl</code>命令来完成的，可以管理服务状态，开机是否启动等</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl [<span class="type">option</span>] [<span class="type">service_name</span>]</span><br><span class="line"><span class="comment"># 不加任何参数则为列出系统所有服务</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>start</td>
+<td>启动服务</td>
+</tr>
+<tr>
+<td>stop</td>
+<td>停止服务</td>
+</tr>
+<tr>
+<td>restart</td>
+<td>重启</td>
+</tr>
+<tr>
+<td>reload</td>
+<td>不关闭服务的情况下，重新读取服务配置文件</td>
+</tr>
+<tr>
+<td>enable</td>
+<td>开机启动</td>
+</tr>
+<tr>
+<td>disable</td>
+<td>开机不启动</td>
+</tr>
+<tr>
+<td>status</td>
+<td>查看指定服务状态</td>
+</tr>
+</tbody></table>
+<p>比如我们可以查看防火墙的状态</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+<h3 id="练习：关闭防火墙"><a href="#练习：关闭防火墙" class="headerlink" title="练习：关闭防火墙"></a>练习：关闭防火墙</h3><p>这里就在Linux上安装nginx，然后由于防火墙的原因我们无法访问nginx，我们就只可以关闭防火墙访问，然后取消访问墙的开机自启，重启Linux，启动nginx再次防问</p>
+<h4 id="scp远程复制"><a href="#scp远程复制" class="headerlink" title="scp远程复制"></a>scp远程复制</h4><p>scp是 secure copy 的缩写，用于 Linux 之间复制文件和目录，在linux 系统下基于 ssh 登陆进行安全的远程文件拷贝命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp [<span class="type">options</span>] file_source file_target</span><br><span class="line"><span class="comment"># 这里的文件路径为远程文件地址 用户名@ip:/文件路径</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-P</td>
+<td>注意是大写的P, port是指定数据传输用到的ssh端口号</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>保留原文件的修改时间，访问时间和访问权限</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>递归复制整个目录</td>
+</tr>
+</tbody></table>
+<p>拷贝电脑上的任意文件到linux上</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp lengwen@<span class="number">192.168</span>.<span class="number">31.105</span>:/Users/lengwen/Desktop/nginx<span class="literal">-1</span>.<span class="number">18.0</span>.tar.gz .</span><br></pre></td></tr></table></figure>
+
+<p>拷贝Linux上的任意文件到电脑上</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp <span class="number">1</span>.txt lengwen@<span class="number">192.168</span>.<span class="number">31.105</span>:/Users/lengwen/Desktop/</span><br></pre></td></tr></table></figure>
+
+<h4 id="rz-x2F-sz上传下载"><a href="#rz-x2F-sz上传下载" class="headerlink" title="rz&#x2F;sz上传下载"></a>rz&#x2F;sz上传下载</h4><p>因为<code>termius</code>不支持<code>rz/sz</code>，我Mac上自带的终端也不支持，这个大家自己下去试试</p>
+<h4 id="sftp上传"><a href="#sftp上传" class="headerlink" title="sftp上传"></a>sftp上传</h4><p>现在大部分ssh工具都不支持rz&#x2F;sz的原因就是因为有了sftp<code>，termius</code>中也是支持的，但<code>rz/sz</code>在很多时候也是替代不了的，比如你们公司内网的服务器可能都是使用跳板机登录的，自己的电脑和内网的服务器网络不可达，所以sftp这种方式就不可以用了</p>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678800563813.png"></p>
+<h4 id="实战开始"><a href="#实战开始" class="headerlink" title="实战开始"></a>实战开始</h4><ul>
+<li><p>下载nginx源码包：<a target="_blank" rel="noopener" href="https://nginx.org/en/download.html">nginx</a></p>
+</li>
+<li><p>上传解压</p>
+</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf nginx<span class="literal">-1</span>.<span class="number">18.0</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>安装依赖</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="literal">-y</span> install pcre<span class="literal">-devel</span></span><br><span class="line">yum install ‐y zlib zlib‐devel</span><br><span class="line">yum <span class="literal">-y</span> install openssl openssl<span class="literal">-devel</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>检查环境</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译安装</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; sudo make install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动nginx</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span>  /usr/local/nginx/sbin &amp;&amp; sudo ./nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看进程</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ps</span> <span class="literal">-ef</span> | grep nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>curl</code>命令访问127.0.0.1，发现返回了nginx的index.html的文件</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">curl</span> <span class="number">127.0</span>.<span class="number">0.1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>本机浏览器访问Linux的ip，发现访问不了，这是因为有防火墙，我们关闭下</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld	</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>浏览器重新访问</li>
+</ul>
+<p><img src="https://imagebed-1252410096.cos.ap-nanjing.myqcloud.com/1678801967385.png"></p>
+<ul>
+<li>开机重启nginx再次访问</li>
+<li>取消防火墙的开机自启</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重启</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这节课主要带大家学习了下服务和进程的相关概念，进程那里在工作中用到的也挺多的，因为我们开发中把程序部署到服务器上后需要观察服务的运行情况等信息，大家可以好好记一下</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://study.kevinlu98.cn/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html" title="(九)Linux服务与进程管理" target="_blank" rel="external">https://study.kevinlu98.cn/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/kevinlu98" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/kevinlu98" target="_blank"><span class="text-dark">Mr丶冷文</span><small class="ml-1x">Golang Engineer &amp; Web Developer</small></a></h3>
+        <div>喜欢网站设计、coding、爱折腾，一个不折不扣的小码农</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+           
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2023/03/01/bao-guan-li-ji-jiao-ben.html" title="(八)Linux包管理及shell脚本"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="tencent://message/?uin=1628048198&Site=&menu=yes" target="_blank" title="Qq" data-toggle=tooltip data-placement=top><i class="icon icon-qq"></i></a></li>
+        
+        <li><a href="https://github.com/kevinlu98" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://weibo.com/lengwenboke" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="mailto:kevinlu98@qq.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 Mr丶冷文 
+        
+        
+            <a target="_blank" href="https://beian.miit.gov.cn">陕ICP备19024566-1号</a>
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <!-- <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> -->
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+  var gitalk = new Gitalk({
+    clientID: '8e99fb35d3204ac0e84f',
+    clientSecret: '50644825509a07e9c7ec2c206dae2d0cc6c78bb7',
+    repo: 'kevinlu98.github.io',
+    owner: 'kevinlu98',
+    admin: ['kevinlu98'],
+    id: md5(location.pathname),
+    distractionFreeMode: true,
+    language: 'zh-CN',
+    enableHotKey: 'true'
+  })
+  gitalk.render('comments')
+  </script>
+      
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+
+
+   <style>
+      #waifu {
+         z-index: 999999 !important;
+         right: 16px !important;
+         left: auto;
+      }
+
+      #waifu-tips {
+         background-color: rgba(236, 217, 188, 1)
+      }
+   </style>
+   <script>
+      const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+      // 封装异步加载资源的方法
+      function loadExternalResource(url, type) {
+         return new Promise((resolve, reject) => {
+            let tag;
+
+            if (type === "css") {
+               tag = document.createElement("link");
+               tag.rel = "stylesheet";
+               tag.href = url;
+            }
+            else if (type === "js") {
+               tag = document.createElement("script");
+               tag.src = url;
+            }
+            if (tag) {
+               tag.onload = () => resolve(url);
+               tag.onerror = () => reject(url);
+               document.head.appendChild(tag);
+            }
+         });
+      }
+
+      // 加载 waifu.css live2d.min.js waifu-tips.js
+      if (screen.width >= 768) {
+         Promise.all([
+            loadExternalResource(live2d_path + "waifu.css", "css"),
+            loadExternalResource(live2d_path + "live2d.min.js", "js"),
+            loadExternalResource(live2d_path + "waifu-tips.js", "js")
+         ]).then(() => {
+            localStorage.setItem("modelId", 1);
+            localStorage.setItem("modelTexturesId", 21);
+            // 配置选项的具体用法见 README.md
+            initWidget({
+               waifuPath: "/tips.json",
+               apiPath: "https://live2d.fghrsh.net/api/",
+               // cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+               tools: ["hitokoto", "asteroids", "photo", "quit"]
+            });
+            $('#waifu-tool').append(`<span class="back-to-top" id="waifu-tool-top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/></svg></span>`)
+            $("#waifu-tool-top").on('click', function () {
+               $('body,html').stop().animate({
+                  scrollTop: 0
+               })
+            })
+         });
+      }
+   </script>
+   
+
+  
+    <style>
+        .highlight-wrap .copy-btn {
+            display: inline-block;
+            padding: 2px 6px;
+            position: absolute;
+            right: 4px;
+            top: 36px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .highlight-wrap .copy-tips {
+            position: absolute;
+            z-index: 2;
+            font-size: 12px;
+            top: 36px;
+            right: 36px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background-color: #000;
+            color: #fff;
+            display: none;
+        }
+
+        .highlight-wrap .copy-tips::before {
+            content: '◆';
+            color: #000;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+        }
+
+
+
+        .highlight-wrap {
+            position: relative;
+        }
+    </style>
+    <script>
+        addLoadEvent(() => {
+            let copyIcon = `<svg t="1673632770304" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2720" width="20" height="20"><path d="M857.373005 65.290005 469.604424 65.290005c-34.211173 0-62.044078 27.832905-62.044078 62.043055l0 10.340509-63.076594 0c-25.993001 0-48.228421 16.346293-57.001225 39.293935L166.626995 176.967504c-34.21015 0-62.043055 27.832905-62.043055 62.043055l0 657.655358c0 34.21015 27.832905 62.043055 62.043055 62.043055l550.115086 0c34.21015 0 62.043055-27.832905 62.043055-62.043055l0-49.634444 78.587869 0c34.21015 0 62.043055-27.832905 62.043055-62.043055L919.41606 127.33306C919.41606 93.122911 891.583155 65.290005 857.373005 65.290005zM344.483752 179.035606l194.402595 0c10.833743 0 19.646456 8.813736 19.646456 19.646456 0 10.833743-8.813736 19.646456-19.646456 19.646456L344.483752 218.328517c-10.833743 0-19.646456-8.813736-19.646456-19.646456C324.836273 187.849342 333.650009 179.035606 344.483752 179.035606zM737.423099 896.665917c0 11.402701-9.278317 20.681018-20.681018 20.681018L166.626995 917.346935c-11.403724 0-20.681018-9.278317-20.681018-20.681018L145.945977 239.010559c0-11.402701 9.277294-20.681018 20.681018-20.681018l120.111588 0c8.197706 24.02723 30.977525 41.362037 57.744145 41.362037l194.402595 0c26.767644 0 49.54644-17.334807 57.744145-41.362037l120.111588 0c11.402701 0 20.681018 9.278317 20.681018 20.681018L737.422076 896.665917zM878.054023 784.988418c0 11.402701-9.278317 20.681018-20.681018 20.681018l-78.587869 0L778.785136 239.010559c0-34.21015-27.832905-62.043055-62.043055-62.043055L595.886549 176.967504c-8.771781-22.947641-31.007201-39.293935-57.001225-39.293935l-89.963964 0L448.921359 127.33306c0-11.403724 9.278317-20.681018 20.683065-20.681018l387.768581 0c11.402701 0 20.681018 9.277294 20.681018 20.681018L878.054023 784.988418z" fill="#272636" p-id="2721"></path><path d="M620.597347 334.252737 260.748652 334.252737c-11.422144 0-20.681018 9.259898-20.681018 20.681018s9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018S632.018467 334.252737 620.597347 334.252737z" fill="#272636" p-id="2722"></path><path d="M620.597347 454.201619 260.748652 454.201619c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l359.849718 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C641.278365 463.46254 632.018467 454.201619 620.597347 454.201619z" fill="#272636" p-id="2723"></path><path d="M440.673511 574.151525 260.748652 574.151525c-11.422144 0-20.681018 9.259898-20.681018 20.681018 0 11.42112 9.258874 20.681018 20.681018 20.681018l179.924859 0c11.42112 0 20.681018-9.259898 20.681018-20.681018C461.35453 583.411423 452.093609 574.151525 440.673511 574.151525z" fill="#272636" p-id="2724"></path></svg>`
+            $('.highlight').each(function (i, e) {
+                var $wrap = $('<div>').addClass('highlight-wrap')
+                $(e).after($wrap)
+                $wrap.append(`<span class="copy-tips">复制</span>`)
+                let icon = `<i class="copy-btn">${copyIcon}</i>`
+                $wrap.append(icon).append(e)
+            })
+            $('.highlight-wrap .copy-btn').on('click', function () {
+                var code = $(this).parent().find(".code")[0].innerText
+                var ta = document.createElement('textarea')
+                document.body.appendChild(ta)
+                ta.style.position = 'absolute'
+                ta.style.top = '0px'
+                ta.style.left = '0px'
+                ta.value = code
+                ta.select()
+                ta.focus()
+                var result = document.execCommand('copy')
+                if(result){
+                    $(this).parent().children('.copy-tips').text('已复制')
+                }else{
+                    $(this).parent().children('.copy-tips').text('复制失败')
+                }
+               
+            }).mouseenter(function () {
+                $(this).parent().children('.copy-tips').stop().fadeIn()
+            }).mouseleave(function () {
+                $(this).parent().children('.copy-tips').stop().fadeOut().text('复制')
+            })
+        })
+    </script>
+    
+</body>
+</html>
