@@ -1,3 +1,4 @@
+https://study.kevinlu98.cn/2023/03/15/ke-shi-hua-mian-ban.html
 https://study.kevinlu98.cn/2023/03/14/fu-wu-yu-jin-cheng-guan-li.html
 https://study.kevinlu98.cn/2023/03/01/bao-guan-li-ji-jiao-ben.html
 https://study.kevinlu98.cn/2023/02/26/huan-jing-bian-liang.html
@@ -44,6 +45,10 @@ https://study.kevinlu98.cn/
 https://study.kevinlu98.cn/tags/linux/
 https://study.kevinlu98.cn/tags/vmware/
 https://study.kevinlu98.cn/tags/centos/
+https://study.kevinlu98.cn/tags/shell/
+https://study.kevinlu98.cn/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/
+https://study.kevinlu98.cn/tags/%E5%AE%9D%E5%A1%94/
+https://study.kevinlu98.cn/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/
 https://study.kevinlu98.cn/tags/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/
 https://study.kevinlu98.cn/tags/%E9%87%8D%E5%AE%9A%E5%90%91/
 https://study.kevinlu98.cn/tags/%E7%AE%A1%E9%81%93/
@@ -54,9 +59,10 @@ https://study.kevinlu98.cn/tags/sed/
 https://study.kevinlu98.cn/tags/awk/
 https://study.kevinlu98.cn/tags/%E7%94%A8%E6%88%B7/
 https://study.kevinlu98.cn/tags/%E6%9D%83%E9%99%90/
-https://study.kevinlu98.cn/tags/shell/
 https://study.kevinlu98.cn/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/
 https://study.kevinlu98.cn/tags/yum/
+https://study.kevinlu98.cn/tags/%E8%BF%9B%E7%A8%8B/
+https://study.kevinlu98.cn/tags/%E6%9C%8D%E5%8A%A1/
 https://study.kevinlu98.cn/tags/java/
 https://study.kevinlu98.cn/tags/springboot/
 https://study.kevinlu98.cn/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/
