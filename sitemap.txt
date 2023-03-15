@@ -60,9 +60,9 @@ https://study.kevinlu98.cn/tags/awk/
 https://study.kevinlu98.cn/tags/%E7%94%A8%E6%88%B7/
 https://study.kevinlu98.cn/tags/%E6%9D%83%E9%99%90/
 https://study.kevinlu98.cn/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/
-https://study.kevinlu98.cn/tags/yum/
 https://study.kevinlu98.cn/tags/%E8%BF%9B%E7%A8%8B/
 https://study.kevinlu98.cn/tags/%E6%9C%8D%E5%8A%A1/
+https://study.kevinlu98.cn/tags/yum/
 https://study.kevinlu98.cn/tags/java/
 https://study.kevinlu98.cn/tags/springboot/
 https://study.kevinlu98.cn/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/
